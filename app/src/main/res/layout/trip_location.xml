@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Enter Trip Location"
+        android:id="@+id/trip_location"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="25dp"
+         />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Enter Location"
+        android:layout_marginTop="100dp"
+        android:id="@+id/edit_trip_location"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/trip_location"
+        android:layout_alignStart="@+id/trip_location"
+        android:layout_alignRight="@+id/trip_location"
+        android:layout_alignEnd="@+id/trip_location"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Enter Person Count"
+        android:id="@+id/trip_no_persons"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="175dp"
+        android:layout_alignLeft="@+id/edit_trip_location"
+        android:layout_alignStart="@+id/edit_trip_location"
+        android:layout_alignRight="@+id/edit_trip_location"
+        android:layout_alignEnd="@+id/edit_trip_location"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Enter Count"
+        android:layout_marginTop="225dp"
+        android:id="@+id/edit_trip_no_persons"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/trip_no_persons"
+        android:layout_alignStart="@+id/trip_no_persons"
+        android:layout_alignRight="@+id/trip_no_persons"
+        android:layout_alignEnd="@+id/trip_no_persons"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/button_cancel"
+        android:layout_marginTop="67dp"
+        android:layout_below="@+id/edit_trip_no_persons"
+        android:layout_alignLeft="@+id/edit_trip_no_persons"
+        android:layout_alignStart="@+id/edit_trip_no_persons" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:id="@+id/button_next"
+        android:layout_alignBottom="@+id/button_cancel"
+        android:layout_alignRight="@+id/edit_trip_no_persons"
+        android:layout_alignEnd="@+id/edit_trip_no_persons" />
+
+
+</RelativeLayout>
+</ScrollView>

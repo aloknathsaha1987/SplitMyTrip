@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Enter Item Name"
+        android:id="@+id/trip_item"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="25dp"
+        />
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Enter Item Name"
+        android:layout_marginTop="100dp"
+        android:id="@+id/enter_trip_item"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/trip_item"
+        android:layout_alignStart="@+id/trip_item"
+        android:layout_alignRight="@+id/trip_item"
+        android:layout_alignEnd="@+id/trip_item"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Enter Item Cost"
+        android:id="@+id/trip_item_cost"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="175dp"
+        android:layout_alignLeft="@+id/enter_trip_item"
+        android:layout_alignStart="@+id/enter_trip_item"
+        android:layout_alignRight="@+id/enter_trip_item"
+        android:layout_alignEnd="@+id/enter_trip_item"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Enter Item Cost"
+        android:layout_marginTop="225dp"
+        android:id="@+id/edit_trip_item_cost"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/trip_item_cost"
+        android:layout_alignStart="@+id/trip_item_cost"
+        android:layout_alignRight="@+id/trip_item_cost"
+        android:layout_alignEnd="@+id/trip_item_cost"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/button_cancel"
+        android:layout_marginTop="67dp"
+        android:layout_below="@+id/edit_trip_item_cost"
+        android:layout_alignLeft="@+id/edit_trip_item_cost"
+        android:layout_alignStart="@+id/edit_trip_item_cost" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:id="@+id/button_next"
+        android:layout_alignBottom="@+id/button_cancel"
+        android:layout_alignRight="@+id/edit_trip_item_cost"
+        android:layout_alignEnd="@+id/edit_trip_item_cost" />
+
+</RelativeLayout>
+
+    </ScrollView>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Enter Person Contact"
+        android:id="@+id/person_contact_info"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/person_contact_number_onscreen"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:layout_toRightOf="@+id/person_contact_info"
+        android:layout_marginLeft="0dp"
+        />
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/imageView_person"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="100dp"
+        android:layout_alignLeft="@+id/person_contact_info"
+        android:layout_alignStart="@+id/person_contact_info" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Name"
+        android:id="@+id/person_name"
+        android:layout_alignLeft="@+id/imageView_person"
+        android:layout_alignStart="@+id/imageView_person"
+        android:layout_marginTop="100dp"
+        android:layout_marginLeft="125dp"
+        android:layout_marginRight="10dp"
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Enter Name"
+        android:layout_marginTop="150dp"
+        android:id="@+id/enter_person_name"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/person_name"
+        android:layout_alignStart="@+id/person_name"
+        android:layout_alignRight="@+id/person_name"
+        android:layout_alignEnd="@+id/person_name"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Phone Number"
+        android:id="@+id/person_phone"
+        android:layout_marginTop="200dp"
+        android:layout_alignLeft="@+id/enter_person_name"
+        android:layout_alignStart="@+id/enter_person_name"
+        android:layout_alignRight="@+id/enter_person_name"
+        android:layout_alignEnd="@+id/enter_person_name"
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Enter Number"
+        android:layout_marginTop="250dp"
+        android:id="@+id/enter_person_number"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/person_phone"
+        android:layout_alignStart="@+id/person_phone"
+        android:layout_alignRight="@+id/person_phone"
+        android:layout_alignEnd="@+id/person_phone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Email"
+        android:id="@+id/person_email"
+        android:layout_marginTop="300dp"
+        android:layout_alignLeft="@+id/enter_person_number"
+        android:layout_alignStart="@+id/enter_person_number"
+        android:layout_alignRight="@+id/enter_person_number"
+        android:layout_alignEnd="@+id/enter_person_number"
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Enter Email"
+        android:layout_marginTop="350dp"
+        android:id="@+id/enter_person_email"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/person_email"
+        android:layout_alignStart="@+id/person_email"
+        android:layout_alignRight="@+id/person_email"
+        android:layout_alignEnd="@+id/person_email"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Amount Paid"
+        android:id="@+id/person_payment"
+        android:layout_marginTop="400dp"
+        android:layout_alignLeft="@+id/enter_person_email"
+        android:layout_alignStart="@+id/enter_person_email"
+        android:layout_alignRight="@+id/enter_person_email"
+        android:layout_alignEnd="@+id/enter_person_email"
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Enter Amount"
+        android:layout_marginTop="450dp"
+        android:id="@+id/enter_person_amount_paid"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/person_payment"
+        android:layout_alignStart="@+id/person_payment"
+        android:layout_alignRight="@+id/person_payment"
+        android:layout_alignEnd="@+id/person_payment"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:id="@+id/button_cancel"
+        android:layout_marginTop="41dp"
+        android:layout_below="@+id/enter_person_amount_paid"
+        android:layout_toLeftOf="@+id/enter_person_amount_paid"
+        android:layout_toStartOf="@+id/enter_person_amount_paid" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next"
+        android:id="@+id/button_next"
+        android:layout_alignTop="@+id/button_cancel"
+        android:layout_alignRight="@+id/enter_person_amount_paid"
+        android:layout_alignEnd="@+id/enter_person_amount_paid"
+        android:layout_marginRight="53dp"
+        android:layout_marginEnd="53dp" />
+
+
+</RelativeLayout>
+
+</ScrollView>

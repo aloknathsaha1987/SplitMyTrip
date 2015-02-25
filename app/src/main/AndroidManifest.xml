@@ -28,7 +28,8 @@
         <activity android:name=".Activities.ExistingTripActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".Activities.SendAmountActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".Activities.GoogleMapsActivity" android:configChanges="orientation|screenSize"/>
-
+        <activity android:name=".Activities.EnterItemActivity" android:configChanges="orientation|screenSize"/>
+        <activity android:name=".Activities.EnterPersonDetailActivity" android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>

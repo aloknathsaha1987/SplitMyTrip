@@ -12,6 +12,7 @@ public class Person extends Trip{
     private double amountPaid;
     private double amountOwed;
     private double amountToGet;
+    private String email;
 
     public Person(String tripName, String name) {
         super(tripName);
@@ -60,5 +61,13 @@ public class Person extends Trip{
 
     public Bitmap getPersonImage() {
         return personImage;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

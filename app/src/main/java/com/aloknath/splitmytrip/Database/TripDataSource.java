@@ -97,6 +97,36 @@ public class TripDataSource {
         return (insertId != -1);
     }
 
+    public List<Trip> getTrips(){
+
+        // Get a list of Trips from the Trip Table
+        sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TripDbOpenHelper.TRIPSTABLENAME, null);
+        // The cursor contains all the persons that have gone to a particular trip
+
+        List<Trip> trips = cursorToTripsList(cursor);
+        return trips;
+
+    }
+
+    private List<Trip> cursorToTripsList(Cursor cursor) {
+
+        List<Trip> trips = new ArrayList<>();
+        if (cursor.getCount()> 0) {
+            while (cursor.moveToNext()) {
+                Trip trip = new Trip(cursor.getString(cursor.getColumnIndex(TripDbOpenHelper.TRIPNAME)));
+                trip.setNoOfPersons(cursor.getInt(cursor.getColumnIndex(TripDbOpenHelper.PERSONS)));
+                trip.setTotalCost(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.TOTALAMOUNT)));
+                trip.setAmountPerHead(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTPERHEAD)));
+                trips.add(trip);
+            }
+        }
+
+        return trips;
+
+    }
+
+
     public List<Person> getPersonsInTrip(String tripName){
 
         // Get a list of person names from the person Table
@@ -188,6 +218,7 @@ public class TripDataSource {
         if (cursor.getCount()> 0) {
             while (cursor.moveToNext()) {
                 item.setItemCost(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNT)));
+                item.setItemCost(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNT)));
             }
         }
         return item;
@@ -198,7 +229,7 @@ public class TripDataSource {
 
         sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
 
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TripDbOpenHelper.ITENARYTABLENAME +
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TripDbOpenHelper.TRIPSTABLENAME +
                 " WHERE trip_name like '%" + tripName + "%'", null);
 
         if (cursor.getCount()> 0) {
@@ -206,9 +237,29 @@ public class TripDataSource {
                trip.setNoOfPersons(cursor.getInt(cursor.getColumnIndex(TripDbOpenHelper.PERSONS)));
                trip.setTotalCost(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.TOTALAMOUNT)));
                trip.setAmountPerHead(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTPERHEAD)));
+               return trip;
             }
         }
-
-        return trip;
+        return null;
     }
+
+    public boolean updateTrip(Trip trip) {
+
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TripDbOpenHelper.TRIPNAME, trip.getTripName());
+        contentValues.put(TripDbOpenHelper.PERSONS, trip.getNoOfPersons());
+        contentValues.put(TripDbOpenHelper.TOTALAMOUNT,trip.getTotalCost());
+        contentValues.put(TripDbOpenHelper.AMOUNTPERHEAD, trip.getAmountPerHead());
+
+       long insertid =   sqLiteDatabase.update(TripDbOpenHelper.TRIPSTABLENAME, contentValues,
+                TripDbOpenHelper.TRIPNAME + " = ? ",
+                new String[] { trip.getTripName() });
+
+        return (insertid != -1);
+
+    }
+
+
 }

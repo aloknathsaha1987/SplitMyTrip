@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.aloknath.splitmytrip.Database.TripDataSource;
+import com.aloknath.splitmytrip.Objects.Trip;
 import com.aloknath.splitmytrip.Objects.TripItem;
 import com.aloknath.splitmytrip.R;
 
@@ -95,6 +96,30 @@ public class EnterItemActivity extends Activity {
         tripItem.setItemCost(itemCost);
 
         tripDataSource.addItenary(tripItem);
+
+        // Also Save to the Trip Table, the Trip Name, The Trip Cost, No of Persons, Amount per Head
+
+        // 1 Check is the particular trip exists in the table, if not create one.
+        Trip trip = tripDataSource.getTrip(tripName);
+        boolean value;
+
+        if(trip == null){
+            trip = new Trip(tripName);
+            trip.setNoOfPersons(bundle.getInt("Trip_no_of_persons"));
+            trip.setTotalCost(itemCost);
+            trip.setAmountPerHead(itemCost/bundle.getInt("Trip_no_of_persons"));
+            value = tripDataSource.addTrip(trip);
+
+            Toast.makeText(this, " Trip added " + value, Toast.LENGTH_LONG).show();
+
+        }else{
+            trip.setTotalCost(trip.getTotalCost() + itemCost);
+            trip.setAmountPerHead(trip.getTotalCost()/ bundle.getInt("Trip_no_of_persons"));
+            value = tripDataSource.updateTrip(trip);
+
+            Toast.makeText(this, " Trip updated " + value + "Trip Name: " + trip.getTripName(), Toast.LENGTH_LONG).show();
+        }
+
         tripDataSource.close();
 
     }

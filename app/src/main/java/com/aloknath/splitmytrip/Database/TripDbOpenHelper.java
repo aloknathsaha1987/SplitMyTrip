@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class TripDbOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASENAME = "split_my_trip_v_1.1.db";
+    private static final String DATABASENAME = "split_my_trip_v_1.2.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String TRIPSTABLENAME = "Trips_Table";

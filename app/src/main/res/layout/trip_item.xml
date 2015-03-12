@@ -21,9 +21,10 @@
         />
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="textPersonName"
         android:hint="Enter Item Name"
+        android:background="#ffffff"
         android:layout_marginTop="100dp"
         android:id="@+id/enter_trip_item"
         android:layout_alignParentTop="true"
@@ -49,9 +50,10 @@
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="textPersonName"
         android:hint="Enter Item Cost"
+        android:background="#ffffff"
         android:layout_marginTop="225dp"
         android:id="@+id/edit_trip_item_cost"
         android:layout_alignParentTop="true"

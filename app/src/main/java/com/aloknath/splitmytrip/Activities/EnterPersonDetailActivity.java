@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.aloknath.splitmytrip.Database.TripDataSource;
 import com.aloknath.splitmytrip.Objects.Person;
+import com.aloknath.splitmytrip.Objects.Trip;
 import com.aloknath.splitmytrip.R;
 import java.util.HashMap;
 import java.util.Map;
@@ -192,6 +193,12 @@ public class EnterPersonDetailActivity extends Activity {
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
+
 
     private void saveToDb() {
 
@@ -199,13 +206,25 @@ public class EnterPersonDetailActivity extends Activity {
         EditText editText = (EditText)findViewById(R.id.enter_person_amount_paid);
         amount = Double.parseDouble(editText.getText().toString());
 
+        Trip trip = tripDataSource.getTrip(tripName);
+        double amountPerHead = trip.getAmountPerHead();
+
+        double amountOwed = amountPerHead - amount;
+        double amountToGet = 0;
+
+        if(amountOwed < 0){
+            amountToGet = -(amountOwed);
+            amountOwed = 0;
+        }
+        amountToGet = Math.round(amountToGet*100)/100.0d;
+        amountOwed = Math.round(amountOwed*100)/100.0d;
+
         person = new Person(tripName, personName);
         person.setContactNo(phoneNumber);
         person.setEmail(email);
         person.setAmountPaid(amount);
-        person.setAmountOwed(0);
-        person.setAmountToGet(0);
-
+        person.setAmountOwed(amountOwed);
+        person.setAmountToGet(amountToGet);
 
         tripDataSource.addPerson(person);
         tripDataSource.close();

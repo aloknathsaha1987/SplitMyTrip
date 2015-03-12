@@ -17,4 +17,10 @@ public class GoogleMapsActivity extends Activity {
         TextView textView = (TextView)findViewById(R.id.textView1);
         textView.setText("Google Maps Activity");
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
 }

@@ -53,4 +53,10 @@ public class SplashActivity extends Activity {
         }, SPLASH_DISPLAY_LENGTH);
 
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
 }

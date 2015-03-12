@@ -125,6 +125,12 @@ public class EnterItemActivity extends Activity {
     }
 
     @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         tripDataSource.open();

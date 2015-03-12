@@ -58,4 +58,10 @@ public class NewTripActivity extends Activity {
 
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
+
 }

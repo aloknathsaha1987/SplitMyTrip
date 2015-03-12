@@ -58,9 +58,10 @@
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="textPersonName"
         android:hint="Enter Name"
+        android:background="#ffffff"
         android:layout_marginTop="150dp"
         android:id="@+id/enter_person_name"
         android:layout_alignParentTop="true"
@@ -85,9 +86,10 @@
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="textPersonName"
         android:hint="Enter Number"
+        android:background="#ffffff"
         android:layout_marginTop="250dp"
         android:id="@+id/enter_person_number"
         android:layout_alignParentTop="true"
@@ -112,9 +114,10 @@
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="textPersonName"
         android:hint="Enter Email"
+        android:background="#ffffff"
         android:layout_marginTop="350dp"
         android:id="@+id/enter_person_email"
         android:layout_alignParentTop="true"
@@ -139,9 +142,10 @@
 
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:inputType="textPersonName"
         android:hint="Enter Amount"
+        android:background="#ffffff"
         android:layout_marginTop="450dp"
         android:id="@+id/enter_person_amount_paid"
         android:layout_alignParentTop="true"

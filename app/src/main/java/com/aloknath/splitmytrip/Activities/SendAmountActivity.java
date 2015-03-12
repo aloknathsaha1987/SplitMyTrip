@@ -17,4 +17,11 @@ public class SendAmountActivity extends Activity {
         TextView textView = (TextView)findViewById(R.id.textView1);
         textView.setText("Send Amount Activity");
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
+
 }

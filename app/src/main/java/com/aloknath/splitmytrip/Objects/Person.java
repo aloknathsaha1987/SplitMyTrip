@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * Created by ALOKNATH on 2/24/2015.
  */
-public class Person extends Trip{
+public class Person extends Trip implements Comparable<Person>{
     private final String name;
     private String contactNo;
     private Bitmap personImage;
@@ -13,10 +13,19 @@ public class Person extends Trip{
     private double amountOwed;
     private double amountToGet;
     private String email;
+    private double balance;
 
     public Person(String tripName, String name) {
         super(tripName);
         this.name = name;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public double getAmountPaid() {
@@ -69,5 +78,12 @@ public class Person extends Trip{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public int compareTo(Person person) {
+
+        int balance = (int) person.getBalance();
+        return (int) (this.getBalance() - balance);
     }
 }

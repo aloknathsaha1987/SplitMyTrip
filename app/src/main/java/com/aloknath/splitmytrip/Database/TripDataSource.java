@@ -38,7 +38,8 @@ public class TripDataSource {
                     TripDbOpenHelper.PERSONTRIP,
                     TripDbOpenHelper.AMOUNTPAID,
                     TripDbOpenHelper.AMOUNTOWED,
-                    TripDbOpenHelper.AMOUNTTOGET};
+                    TripDbOpenHelper.AMOUNTTOGET,
+                    TripDbOpenHelper.BALANCE};
 
 
     public TripDataSource(Context context){
@@ -92,6 +93,7 @@ public class TripDataSource {
         contentValues.put(TripDbOpenHelper.AMOUNTPAID, person.getAmountPaid());
         contentValues.put(TripDbOpenHelper.AMOUNTOWED, person.getAmountOwed());
         contentValues.put(TripDbOpenHelper.AMOUNTTOGET, person.getAmountToGet());
+        contentValues.put(TripDbOpenHelper.BALANCE, person.getBalance());
 
         long insertId = sqLiteDatabase.insert(TripDbOpenHelper.PERSONTABLENAME, null, contentValues);
         return (insertId != -1);
@@ -149,6 +151,7 @@ public class TripDataSource {
                 person.setAmountPaid(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTPAID)));
                 person.setAmountToGet(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTTOGET)));
                 person.setAmountOwed(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTOWED)));
+                person.setBalance(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.BALANCE)));
                 persons.add(person);
             }
         }
@@ -199,6 +202,7 @@ public class TripDataSource {
                 person.setAmountPaid(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTPAID)));
                 person.setAmountOwed(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTOWED)));
                 person.setAmountToGet(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTTOGET)));
+                person.setBalance(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.BALANCE)));
 
             }
         }

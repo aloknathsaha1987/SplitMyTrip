@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class TripDbOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASENAME = "split_my_trip_v_1.2.db";
+    private static final String DATABASENAME = "split_my_trip_v_1.4.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String TRIPSTABLENAME = "Trips_Table";
@@ -31,6 +31,7 @@ public class TripDbOpenHelper extends SQLiteOpenHelper {
     public static final String AMOUNTPAID = "amount_paid";
     public static final String AMOUNTOWED = "amount_owed";
     public static final String AMOUNTTOGET = "amount_to_get";
+    public static final String BALANCE = "balance";
 
     private static final String TABLECREATE_TRIPS_TABLE =
             "CREATE TABLE IF NOT EXISTS " + TRIPSTABLENAME + "(" +
@@ -55,7 +56,8 @@ public class TripDbOpenHelper extends SQLiteOpenHelper {
                     PERSONTRIP + " TEXT, " +
                     AMOUNTPAID + " BLOB, " +
                     AMOUNTOWED + " BLOB, " +
-                    AMOUNTTOGET + " BLOB " + ")";
+                    AMOUNTTOGET + " BLOB, " +
+                    BALANCE + " BLOB " +")";
 
     public TripDbOpenHelper(Context context) {
         super(context, DATABASENAME, null, DATABASE_VERSION);

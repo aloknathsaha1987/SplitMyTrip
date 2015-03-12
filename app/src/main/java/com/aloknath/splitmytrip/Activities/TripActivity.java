@@ -3,6 +3,7 @@ package com.aloknath.splitmytrip.Activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
@@ -15,7 +16,10 @@ import com.aloknath.splitmytrip.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+
+import static com.aloknath.splitmytrip.Calculator.BalanceCalculator.calculate;
 
 /**
  * Created by ALOKNATH on 3/11/2015.
@@ -41,6 +45,40 @@ public class TripActivity extends Activity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         tripItemsPersons = getTripItems((String)bundle.get("tripName"));
+
+        if(persons.size() > 0) {
+
+            //Log.i("The Map Returned: ", "Sender: " + persons.get(0).getName());
+            List<HashMap<String, Object>> result;
+            result = calculate(persons, 0);
+
+            if(result.size() > 0) {
+                HashMap<String, Object> mapReturned0 = result.get(0);
+                Person sender;
+                Person recipient;
+                double amount;
+
+               // Toast.makeText(TripActivity.this, "Sender: " + sender.getName() + " gave " + String.valueOf(amount) + " to " + recipient.getName(), Toast.LENGTH_LONG).show();
+
+                Iterator iterator = result.iterator();
+
+                while (iterator.hasNext()) {
+
+                    HashMap<String, Object> mapReturned = (HashMap<String, Object>) iterator.next();
+                    sender = (Person) mapReturned.get("from");
+                    recipient = (Person) mapReturned.get("to");
+                    amount = (Double) mapReturned.get("amount");
+
+                    Log.i("The Map Returned: ", sender.getName() + " has to give " + String.valueOf(amount) + " to " + recipient.getName());
+
+                    //Toast.makeText(TripActivity.this, "Sender: " + sender.getName() + " gave " + String.valueOf(amount) + " to " + recipient.getName(), Toast.LENGTH_LONG).show();
+
+                }
+            }else{
+                Log.i("The Map Returned: "," is Null");
+            }
+        }
+
 
         listAdapter = new ExpandableBaseAdapter(this, tripItemsPersons);
 
@@ -110,6 +148,8 @@ public class TripActivity extends Activity {
       }
       i=0;
       persons = tripDataSource.getPersonsInTrip(tripName);
+
+
       HashMap<Integer, Person> personsList = new HashMap<>();
       for(Person person: persons){
           personsList.put(i, person);

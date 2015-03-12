@@ -225,6 +225,7 @@ public class EnterPersonDetailActivity extends Activity {
         person.setAmountPaid(amount);
         person.setAmountOwed(amountOwed);
         person.setAmountToGet(amountToGet);
+        person.setBalance(amount - amountPerHead );
 
         tripDataSource.addPerson(person);
         tripDataSource.close();

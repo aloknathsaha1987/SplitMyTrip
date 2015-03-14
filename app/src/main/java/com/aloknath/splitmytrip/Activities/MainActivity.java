@@ -1,7 +1,6 @@
 package com.aloknath.splitmytrip.Activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -11,17 +10,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.TextView;
 
 import com.aloknath.splitmytrip.Fragments.Fragment_Billing;
 import com.aloknath.splitmytrip.Fragments.Fragment_Existing_Trip;
 import com.aloknath.splitmytrip.Fragments.Fragment_Google_Maps;
 import com.aloknath.splitmytrip.Fragments.Fragment_New_Trip;
-import com.aloknath.splitmytrip.NavigationDrawerFragment;
+import com.aloknath.splitmytrip.Fragments.NavigationDrawerFragment;
 import com.aloknath.splitmytrip.R;
 
 

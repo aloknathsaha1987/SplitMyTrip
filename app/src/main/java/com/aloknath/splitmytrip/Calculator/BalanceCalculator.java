@@ -1,9 +1,6 @@
 package com.aloknath.splitmytrip.Calculator;
 
-import android.util.Log;
-
 import com.aloknath.splitmytrip.Objects.Person;
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -14,7 +11,7 @@ import java.util.List;
 /**
  * Created by ALOKNATH on 3/12/2015.
  */
-public class BalanceCalculator {
+public class BalanceCalculator implements  java.io.Serializable{
 
     public static List <HashMap< String , Object >> calculate ( List<Person> persons
             , double tolerance ) {
@@ -31,11 +28,6 @@ public class BalanceCalculator {
             if ( Math.abs(person.getBalance()) <= tolerance ){
                 iterator.remove() ;
             }
-        }
-
-        while(iterator.hasNext()){
-            Person person = iterator.next();
-            //Log.i("Value of person's Balance after removal: ", String.valueOf(person.getBalance()));
         }
 
         if ( persons.size() == 1) {
@@ -59,7 +51,7 @@ public class BalanceCalculator {
 
     private static List <HashMap<String,Object>> basicDebts (List<Person> persons, double tolerance ) {
 
-        List < HashMap < String , Object > > debts = new LinkedList <>() ;
+        List <HashMap < String , Object > > debts = new LinkedList <>() ;
 
         int resolvedMembers = 0;
 
@@ -68,14 +60,7 @@ public class BalanceCalculator {
             // transaction is from lowest balance to highest balance
             Collections.sort(persons) ;
 
-            Iterator<Person> iterator = persons.iterator();
-
-//            for(Person person: persons){
-//                Log.i("Value of person's Balance after sorting: ", String.valueOf(person.getBalance()));
-//            }
-
             Person sender = persons.get(0);
-
             Person recipient = persons.get(persons.size() - 1) ;
 
             double senderShouldSend = Math . abs ( sender.getBalance() ) ;
@@ -100,9 +85,6 @@ public class BalanceCalculator {
             values.put("amount", amount) ;
             values.put("to", recipient) ;
 
-//            Log.i("The Values Put: ", " From: " + ((Person)values.get("from")).getName() + "amount"
-//                    + String.valueOf((Double)values.get("amount")) + " to : " + ((Person)values.get("to")).getName());
-
             debts.add(values);
 
             // delete members who are settled
@@ -126,7 +108,6 @@ public class BalanceCalculator {
                iterator . remove () ;
         }
         return debts;
-
     }
 
  }

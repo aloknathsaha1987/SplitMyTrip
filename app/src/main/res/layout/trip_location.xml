@@ -20,6 +20,7 @@
         android:layout_marginTop="50dp"
         android:layout_marginLeft="25dp"
          />
+
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="40dp"
@@ -33,7 +34,6 @@
         android:layout_alignStart="@+id/trip_location"
         android:layout_alignRight="@+id/trip_location"
         android:layout_alignEnd="@+id/trip_location"/>
-
 
     <TextView
         android:layout_width="wrap_content"
@@ -56,12 +56,25 @@
         android:hint="Enter Count"
         android:background="#ffffff"
         android:layout_marginTop="225dp"
+        android:focusable="false"
         android:id="@+id/edit_trip_no_persons"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/trip_no_persons"
         android:layout_alignStart="@+id/trip_no_persons"
         android:layout_alignRight="@+id/trip_no_persons"
-        android:layout_alignEnd="@+id/trip_no_persons"/>
+        android:layout_alignEnd="@+id/trip_no_persons"
+        />
+
+    <RelativeLayout
+        android:id="@+id/Key_board_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_trip_no_persons"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="38dp"
+        android:layout_marginTop="15dp"
+        android:background="#ffffff" >
+    </RelativeLayout>
 
     <Button
         android:layout_width="wrap_content"
@@ -69,7 +82,7 @@
         android:text="Cancel"
         android:id="@+id/button_cancel"
         android:layout_marginTop="67dp"
-        android:layout_below="@+id/edit_trip_no_persons"
+        android:layout_below="@+id/Key_board_container"
         android:layout_alignLeft="@+id/edit_trip_no_persons"
         android:layout_alignStart="@+id/edit_trip_no_persons" />
 
@@ -84,4 +97,7 @@
 
 
 </RelativeLayout>
+
+
+
 </ScrollView>

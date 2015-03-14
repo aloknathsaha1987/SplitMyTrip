@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * Created by ALOKNATH on 2/24/2015.
  */
-public class Person extends Trip implements Comparable<Person>{
+public class Person extends Trip implements Comparable<Person>, java.io.Serializable{
     private final String name;
     private String contactNo;
     private Bitmap personImage;

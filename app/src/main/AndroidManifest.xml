@@ -31,6 +31,8 @@
         <activity android:name=".Activities.EnterItemActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".Activities.EnterPersonDetailActivity" android:configChanges="orientation|screenSize"/>
         <activity android:name=".Activities.TripActivity" android:configChanges="orientation|screenSize"/>
+        <activity android:name=".Activities.AttachFragmentActivity" android:configChanges="orientation|screenSize"/>
+
     </application>
 
 </manifest>

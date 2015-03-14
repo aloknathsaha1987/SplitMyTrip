@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by ALOKNATH on 2/24/2015.
  */
-public class Trip {
+public class Trip implements java.io.Serializable{
     private final String tripName;
     private Bitmap tripImage;
     private double totalCost;

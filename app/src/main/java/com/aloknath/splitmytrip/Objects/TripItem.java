@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * Created by ALOKNATH on 2/24/2015.
  */
-public class TripItem extends Trip {
+public class TripItem extends Trip implements java.io.Serializable{
 
     private final String itemName;
     private double itemCost;

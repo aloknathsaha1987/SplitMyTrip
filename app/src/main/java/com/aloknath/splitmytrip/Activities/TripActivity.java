@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.aloknath.splitmytrip.Adapters.ExpandableBaseAdapter;
 import com.aloknath.splitmytrip.Database.TripDataSource;
+import com.aloknath.splitmytrip.Fragments.ParentViewPagerFragment;
 import com.aloknath.splitmytrip.Objects.Person;
 import com.aloknath.splitmytrip.Objects.TripItem;
 import com.aloknath.splitmytrip.R;
@@ -32,6 +33,7 @@ public class TripActivity extends Activity {
     private List<Person> persons;
     private TripDataSource tripDataSource;
     private ExpandableBaseAdapter listAdapter;
+    private List<HashMap<String, Object>> result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,6 @@ public class TripActivity extends Activity {
         if(persons.size() > 0) {
 
             //Log.i("The Map Returned: ", "Sender: " + persons.get(0).getName());
-            List<HashMap<String, Object>> result;
             result = calculate(persons, 0);
 
             if(result.size() > 0) {
@@ -129,12 +130,40 @@ public class TripActivity extends Activity {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
+                if(groupPosition == 0) {
+                    startActivity(startIntent(groupPosition, childPosition, tripItemsPersons.getItems().get(childPosition).getItemName(), tripItemsPersons.getItems().size()));
+                   //Toast.makeText(TripActivity.this, " The Child Clicked :" + tripItemsPersons.getItems().get(childPosition).getItemName(), Toast.LENGTH_SHORT).show();
 
-                return false;
+                }else{
+                    startActivity(startIntent(groupPosition,childPosition, tripItemsPersons.getPersons().get(childPosition).getName(), tripItemsPersons.getPersons().size()));
+                   // Toast.makeText(TripActivity.this, " The Child Clicked :" + tripItemsPersons.getPersons().get(childPosition).getName(), Toast.LENGTH_SHORT).show();
+
+                }
+
+                return true;
             }
         });
     }
 
+
+    private Intent startIntent(int groupPosition,int childPosition, String name, int count) {
+
+        Intent intent = new Intent(this, AttachFragmentActivity.class);
+        Bundle extras = new Bundle();
+        extras.putInt("groupPosition", groupPosition);
+        extras.putInt("childPosition", childPosition);
+        extras.putString("name", name);
+        extras.putInt("count", count);
+        if(groupPosition == 0){
+            extras.putSerializable("hashMap", tripItemsPersons.getItems());
+        }else{
+            extras.putSerializable("hashMap", tripItemsPersons.getPersons());
+            extras.putSerializable("price_split", (java.io.Serializable) result);
+        }
+        extras.putString("FragmentTagKey", ParentViewPagerFragment.TAG);
+        intent.putExtras(extras);
+        return intent;
+    }
     private TripItemsPersons getTripItems(String tripName) {
 
 

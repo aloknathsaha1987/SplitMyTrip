@@ -154,6 +154,7 @@ public class TripActivity extends Activity {
         extras.putInt("childPosition", childPosition);
         extras.putString("name", name);
         extras.putInt("count", count);
+
         if(groupPosition == 0){
             extras.putSerializable("hashMap", tripItemsPersons.getItems());
         }else{
@@ -164,9 +165,8 @@ public class TripActivity extends Activity {
         intent.putExtras(extras);
         return intent;
     }
+
     private TripItemsPersons getTripItems(String tripName) {
-
-
 
       tripItems = tripDataSource.getTripItems(tripName);
       HashMap<Integer, TripItem> tripItemList = new HashMap<>();
@@ -204,17 +204,10 @@ public class TripActivity extends Activity {
             return items;
         }
 
-//        public void setItems(HashMap<Integer, TripItem> items) {
-//            this.items = items;
-//        }
-
         public HashMap<Integer, Person> getPersons() {
             return persons;
         }
 
-//        public void setPersons(HashMap<Integer, Person> persons) {
-//            this.persons = persons;
-//        }
     }
 
     @Override

@@ -1,14 +1,18 @@
 package com.aloknath.splitmytrip.Activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.aloknath.splitmytrip.Database.TripDataSource;
+import com.aloknath.splitmytrip.Fragments.KeyBoardFragment;
 import com.aloknath.splitmytrip.Objects.Trip;
 import com.aloknath.splitmytrip.Objects.TripItem;
 import com.aloknath.splitmytrip.R;
@@ -16,7 +20,7 @@ import com.aloknath.splitmytrip.R;
 /**
  * Created by ALOKNATH on 2/24/2015.
  */
-public class EnterItemActivity extends Activity {
+public class EnterItemActivity extends FragmentActivity implements KeyBoardFragment.onKeyBoardEvent{
 
     Button cancel;
     Button next;
@@ -24,6 +28,8 @@ public class EnterItemActivity extends Activity {
     private Bundle bundle;
     private Intent intent;
     private TripDataSource tripDataSource;
+    private EditText editText;
+    private KeyBoardFragment keyboard_fragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,35 @@ public class EnterItemActivity extends Activity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        editText = (EditText)findViewById(R.id.edit_trip_item_cost);
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                InputMethodManager imm = (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+
+                if(keyboard_fragment==null)
+                {
+                    keyboard_fragment=KeyBoardFragment.newInstance(editText.getText().toString());
+                    getSupportFragmentManager().beginTransaction().add(R.id.Key_board_container, keyboard_fragment).commit();
+
+                }
+                else
+                {
+                    if(keyboard_fragment.isVisible())
+                        getSupportFragmentManager().beginTransaction().hide(keyboard_fragment).commit();
+                    else
+                    {
+                        keyboard_fragment=KeyBoardFragment.newInstance(editText.getText().toString());
+                        getSupportFragmentManager().beginTransaction().add(R.id.Key_board_container, keyboard_fragment).commit();
+                    }
+                }
             }
         });
 
@@ -125,9 +160,38 @@ public class EnterItemActivity extends Activity {
     }
 
     @Override
-    public void onBackPressed()
-    {
-        finish();
+    public void numberIsPressed(String total) {
+        editText.setText(total);
+    }
+
+    @Override
+    public void doneButtonPressed(String total) {
+        editText.setText(total);
+        if(keyboard_fragment.isVisible())
+            getSupportFragmentManager().beginTransaction().hide(keyboard_fragment).commit();
+    }
+
+    @Override
+    public void backLongPressed() {
+        editText.setText("");
+    }
+
+    @Override
+    public void backButtonPressed(String total) {
+        editText.setText(total);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(keyboard_fragment!=null)
+        {
+            if(keyboard_fragment.isVisible())
+                getSupportFragmentManager().beginTransaction().remove(keyboard_fragment).commit();
+            else
+                super.onBackPressed();
+        }
+        else
+            super.onBackPressed();
     }
 
     @Override

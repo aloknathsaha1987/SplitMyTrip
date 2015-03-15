@@ -19,6 +19,7 @@ import java.util.List;
 /**
  * Created by ALOKNATH on 3/14/2015.
  */
+
 public class ParentViewPagerFragment extends Fragment {
 
     private static int count;
@@ -52,7 +53,7 @@ public class ParentViewPagerFragment extends Fragment {
         ViewPager viewPager = (ViewPager) root.findViewById(R.id.viewPager);
         /** Important: Must use the child FragmentManager or you will see side effects. */
         viewPager.setAdapter(new MyAdapter(getChildFragmentManager()));
-
+        viewPager.setCurrentItem(childPosition);
 
         return root;
     }
@@ -79,7 +80,6 @@ public class ParentViewPagerFragment extends Fragment {
                 args.putSerializable("hashMap", personsList);
             }
             args.putInt("id", id);
-            //args.putInt("childPosition", childPosition);
             args.putInt(ChildFragment.POSITION_KEY, position);
             return ChildFragment.newInstance(args);
         }
@@ -90,22 +90,8 @@ public class ParentViewPagerFragment extends Fragment {
             String title;
             if(id == 0){
                 title = (tripItemList.get(position)).getItemName();
-//                if(childPosition != 0) {
-//                    title = (tripItemList.get(childPosition)).getItemName();
-//                    childPosition = 0;
-//                }else{
-//                    title = (tripItemList.get(position)).getItemName();
-//                }
             }else{
-
                 title = (personsList.get(position)).getName();
-//                if(childPosition != 0){
-//                    title = (personsList.get(childPosition)).getName();
-//                    childPosition = 0;
-//
-//                }else {
-//                    title = (personsList.get(position)).getName();
-//                }
             }
             return title;
         }

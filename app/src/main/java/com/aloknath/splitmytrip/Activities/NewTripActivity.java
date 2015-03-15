@@ -104,12 +104,6 @@ public class NewTripActivity extends FragmentActivity implements KeyBoardFragmen
 
     }
 
-    private void hideKeyBoard() {
-        getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-        );
-    }
-
     @Override
     public void numberIsPressed(String total) {
         editText.setText(total);

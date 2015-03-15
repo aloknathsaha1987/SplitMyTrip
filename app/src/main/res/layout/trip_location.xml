@@ -8,7 +8,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="#FCF75E">
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,9 +53,9 @@
         android:layout_height="40dp"
         android:inputType="textPersonName"
         android:hint="Enter Count"
+        android:focusable="false"
         android:background="#ffffff"
         android:layout_marginTop="225dp"
-        android:focusable="false"
         android:id="@+id/edit_trip_no_persons"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/trip_no_persons"
@@ -95,9 +94,6 @@
         android:layout_alignRight="@+id/edit_trip_no_persons"
         android:layout_alignEnd="@+id/edit_trip_no_persons" />
 
-
 </RelativeLayout>
-
-
 
 </ScrollView>

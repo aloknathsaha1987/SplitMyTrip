@@ -1,19 +1,22 @@
 package com.aloknath.splitmytrip.Activities;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.aloknath.splitmytrip.Database.TripDataSource;
+import com.aloknath.splitmytrip.Fragments.KeyBoardFragment;
 import com.aloknath.splitmytrip.Objects.Person;
 import com.aloknath.splitmytrip.Objects.Trip;
 import com.aloknath.splitmytrip.R;
@@ -23,7 +26,8 @@ import java.util.Map;
 /**
  * Created by ALOKNATH on 2/24/2015.
  */
-public class EnterPersonDetailActivity extends Activity {
+
+public class EnterPersonDetailActivity extends FragmentActivity implements KeyBoardFragment.onKeyBoardEvent {
 
     private Bundle bundle;
     private int noOfPersons;
@@ -35,6 +39,8 @@ public class EnterPersonDetailActivity extends Activity {
     private String email = null;
     private EditText editText;
     private ProgressDialog progressDialog;
+    private KeyBoardFragment keyboard_fragment;
+    private EditText enterCost;
 
     Button cancel;
     Button next;
@@ -68,6 +74,12 @@ public class EnterPersonDetailActivity extends Activity {
 
             @Override
             public void onClick(View view) {
+
+                InputMethodManager imm = (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+
                 EditText editText = (EditText)findViewById(R.id.enter_person_name);
                 personName = editText.getText().toString();
 
@@ -76,6 +88,35 @@ public class EnterPersonDetailActivity extends Activity {
                     phoneAsyncTask.execute(personName);
                 }
 
+            }
+        });
+
+        enterCost = (EditText)findViewById(R.id.enter_person_amount_paid);
+        enterCost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                InputMethodManager imm = (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+
+                if(keyboard_fragment==null)
+                {
+                    keyboard_fragment=KeyBoardFragment.newInstance(enterCost.getText().toString());
+                    getSupportFragmentManager().beginTransaction().add(R.id.Key_board_container, keyboard_fragment).commit();
+
+                }
+                else
+                {
+                    if(keyboard_fragment.isVisible())
+                        getSupportFragmentManager().beginTransaction().hide(keyboard_fragment).commit();
+                    else
+                    {
+                        keyboard_fragment=KeyBoardFragment.newInstance(enterCost.getText().toString());
+                        getSupportFragmentManager().beginTransaction().add(R.id.Key_board_container, keyboard_fragment).commit();
+                    }
+                }
             }
         });
 
@@ -170,12 +211,14 @@ public class EnterPersonDetailActivity extends Activity {
             editText = (EditText)findViewById(R.id.enter_person_number);
             editText.setText(phoneNumber);
 
+        }else{
+            editText = (EditText)findViewById(R.id.enter_person_number);
+            editText.setFocusable(true);
         }
         if(email != null){
             editText = (EditText)findViewById(R.id.enter_person_email);
             editText.setText(email);
         }
-
     }
 
     private void refreshDisplay() {
@@ -194,9 +237,38 @@ public class EnterPersonDetailActivity extends Activity {
     }
 
     @Override
-    public void onBackPressed()
-    {
-        finish();
+    public void numberIsPressed(String total) {
+        enterCost.setText(total);
+    }
+
+    @Override
+    public void doneButtonPressed(String total) {
+        enterCost.setText(total);
+        if(keyboard_fragment.isVisible())
+            getSupportFragmentManager().beginTransaction().hide(keyboard_fragment).commit();
+    }
+
+    @Override
+    public void backLongPressed() {
+        enterCost.setText("");
+    }
+
+    @Override
+    public void backButtonPressed(String total) {
+        enterCost.setText(total);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(keyboard_fragment!=null)
+        {
+            if(keyboard_fragment.isVisible())
+                getSupportFragmentManager().beginTransaction().remove(keyboard_fragment).commit();
+            else
+                super.onBackPressed();
+        }
+        else
+            super.onBackPressed();
     }
 
 

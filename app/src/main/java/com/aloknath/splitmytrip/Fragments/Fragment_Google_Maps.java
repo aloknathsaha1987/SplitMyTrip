@@ -3,6 +3,8 @@ package com.aloknath.splitmytrip.Fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -15,8 +17,10 @@ import android.widget.TextView;
 
 import com.aloknath.splitmytrip.Activities.GoogleMapsActivity;
 import com.aloknath.splitmytrip.Activities.SendAmountActivity;
+import com.aloknath.splitmytrip.CustomViews.RoundedImageView;
 import com.aloknath.splitmytrip.R;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -59,19 +63,20 @@ public class Fragment_Google_Maps extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        try
-        {
-            // get input stream
-            InputStream ims = getActivity().getAssets().open("Google_Maps.jpg");
-            // load image as Drawable
-            Drawable d = Drawable.createFromStream(ims, null);
-            view.setBackground(d);
-        }catch(IOException ex)
-        {
-            return;
+
+
+        RoundedImageView imageView = (RoundedImageView)view.findViewById(R.id.imageView2);
+
+        try {
+            InputStream inputStream = getActivity().getAssets().open("Google_Maps.jpg");
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            Bitmap bitmap = BitmapFactory.decodeStream(bufferedInputStream);
+            imageView.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        view.setOnClickListener(new View.OnClickListener() {
+        imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), GoogleMapsActivity.class);

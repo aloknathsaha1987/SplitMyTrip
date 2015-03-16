@@ -1,13 +1,17 @@
 package com.aloknath.splitmytrip.Fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,11 +36,28 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
     private static HashMap<Integer, Person> personsList;
     private static double amountOwed;
     private static double amountToGet;
+    private onChildEvent childEventListener;
+
+    public interface  onChildEvent {
+        public void amountPaid(String tripName, String from, String to, double amount);
+    }
 
     public static ChildFragment newInstance(Bundle args) {
         ChildFragment fragment = new ChildFragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try{
+            childEventListener = (onChildEvent)activity;
+        } catch(ClassCastException e)
+        {
+            Log.e("ClassCastException in ChildFragment ", activity.toString() + " must implement onChildEvent");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -94,8 +115,6 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
 
         }
 
-
-
         return root;
     }
 
@@ -108,6 +127,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
         Person sender;
         Person recipient;
         double amount;
+        Button give;
 
         if(amountOwed == 0 && amountToGet > 0){
 
@@ -132,13 +152,14 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                     textView2 = new TextView(getActivity());
                     layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layoutParams.gravity = Gravity.CENTER;
+                    layoutParams.gravity = Gravity.TOP;
                     layoutParams.setMargins(10, 10, 10, 10); // (left, top, right, bottom)
                     textView2.setLayoutParams(layoutParams);
                     textView2.setText(recipient.getName() + " has to get $" + String.valueOf(amount) + " from " + sender.getName());
                     textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                     textView2.setBackgroundColor(0xffffdbdb);
                     linearLayout.addView(textView2);
+
                 }
             }
 
@@ -169,6 +190,23 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                     textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                     textView2.setBackgroundColor(0xffffdbdb);
                     linearLayout.addView(textView2);
+
+                    give = new Button(getActivity());
+                    layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+                    layoutParams.setMargins(10, 10, 10, 10);
+                    give.setLayoutParams(layoutParams);
+                    give.setText("Give Amount");
+                    linearLayout.addView(give);
+                    final Person send = sender;
+                    final Person receive = recipient;
+                    final double amountPaid = amount;
+                    give.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            childEventListener.amountPaid(send.getTripName(), send.getName(), receive.getName(), amountPaid);
+                        }
+                    });
 
                 }
             }

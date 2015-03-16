@@ -14,14 +14,13 @@
         android:layout_marginTop="10dp"
         android:background="#ff2bff0d"/>
 
-    <ImageView
+    <com.aloknath.splitmytrip.CustomViews.RoundedImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:id="@+id/imageView2"
         android:layout_alignTop="@+id/margin"
         android:layout_toRightOf="@+id/margin"
         android:layout_toEndOf="@+id/margin"
-        android:background="#ff34ffd8"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"/>

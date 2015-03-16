@@ -190,7 +190,7 @@ public class TripDataSource {
 
     public Person getPersonDetails(String personName, String personTrip){
 
-        Person person = new Person(personName, personTrip);
+        Person person = new Person( personTrip, personName);
         sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
         Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TripDbOpenHelper.PERSONTABLENAME +
                 " WHERE person_name like '%" + personName + "%' AND person_trip like '%" + personTrip + "%'", null);
@@ -266,4 +266,32 @@ public class TripDataSource {
     }
 
 
+    public void removeTrip(Trip trip) {
+
+        // Remove the Trip and the associated persons from all the three tables;
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+        String tripName = trip.getTripName();
+
+        sqLiteDatabase.delete(TripDbOpenHelper.TRIPSTABLENAME, TripDbOpenHelper.TRIPNAME + " = ?", new String[]{tripName});
+        sqLiteDatabase.delete(TripDbOpenHelper.ITENARYTABLENAME, TripDbOpenHelper.ITERNARYTRIP + " =?", new String[]{tripName});
+        sqLiteDatabase.delete(TripDbOpenHelper.PERSONTABLENAME, TripDbOpenHelper.PERSONTRIP + " = ?", new String[]{tripName});
+
+    }
+
+    public void updatePersonsPaid(List<Person> persons) {
+
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+
+        for(Person person: persons){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(TripDbOpenHelper.AMOUNTPAID, person.getAmountPaid());
+            contentValues.put(TripDbOpenHelper.AMOUNTOWED, person.getAmountOwed());
+            contentValues.put(TripDbOpenHelper.AMOUNTTOGET, person.getAmountToGet());
+            contentValues.put(TripDbOpenHelper.BALANCE, person.getBalance());
+
+            sqLiteDatabase.update(TripDbOpenHelper.PERSONTABLENAME, contentValues,
+                    TripDbOpenHelper.PERSONTRIP + " = ? AND " + TripDbOpenHelper.PERSONNAME + " = ?",
+                    new String[] { person.getTripName(), person.getName() });
+        }
+    }
 }

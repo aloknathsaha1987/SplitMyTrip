@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,29 +27,56 @@ public class ExistingTripActivity extends ListActivity {
     private List<Trip> tripList;
     private TripsAdapter adapter;
     private TripDataSource tripDataSource;
+    private int currentNoteId;
+    public static final int MENU_DELETE_ID = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.existing_trips_layout);
 
-        // Get the trip Items from the DB
+        // For Context Menu
+        registerForContextMenu(getListView());
 
+        // Get the trip Items from the DB
         tripDataSource = new TripDataSource(this);
         tripDataSource.open();
-
-        tripList = tripDataSource.getTrips();
-
+        refreshDisplay();
         tripDataSource.close();
 
+
+    }
+
+    public void refreshDisplay(){
+
+        tripList = tripDataSource.getTrips();
         // Set the Custom Adapter
         if (tripList.size() > 0) {
-            Trip trip = tripList.get(0);
-            Toast.makeText(this, "Trip Name: " + trip.getTripName() + " No of Persons: " + String.valueOf(trip.getNoOfPersons()) + " Total Cost" + String.valueOf(trip.getTotalCost()), Toast.LENGTH_LONG).show();
             adapter = new TripsAdapter(this, R.layout.trips_list_display, tripList);
             setListAdapter(adapter);
         }
 
+   }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        currentNoteId = (int) info.id;
+        menu.add(0, MENU_DELETE_ID, 0, "DELETE TRIP");
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId() == MENU_DELETE_ID) {
+            Trip trip = tripList.get(currentNoteId);
+            tripDataSource.open();
+            tripDataSource.removeTrip(trip);
+            refreshDisplay();
+            tripDataSource.close();
+        }
+        return true;
     }
 
     @Override

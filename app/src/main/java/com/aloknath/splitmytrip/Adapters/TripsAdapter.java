@@ -19,7 +19,6 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
 
     private Context context;
     private List<Trip> tripList;
-    TextView textView;
 
     public TripsAdapter(Context context, int resource,  List<Trip> items) {
         super(context, resource , items);
@@ -27,22 +26,31 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
         this.tripList = items;
     }
 
+    static class ViewHolder{
+        TextView trip_title;
+        TextView person_count;
+        TextView total_cost;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater inflater = LayoutInflater.from(getContext());
-        convertView = inflater.inflate(R.layout.trips_list_display, parent, false);
+        if(convertView == null) {
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            convertView = inflater.inflate(R.layout.trips_list_display, parent, false);
+            ViewHolder viewHolder = new ViewHolder();
+            viewHolder.trip_title = (TextView)convertView.findViewById(R.id.trip_title);
+            viewHolder.person_count = (TextView)convertView.findViewById(R.id.edit_person_count);
+            viewHolder.total_cost = (TextView)convertView.findViewById(R.id.edit_total_cost);
+            convertView.setTag(viewHolder);
+        }
 
         Trip trip = getItem(position);
+        ViewHolder holder = (ViewHolder)convertView.getTag();
 
-        textView = (TextView)convertView.findViewById(R.id.trip_title);
-        textView.setText(trip.getTripName());
-
-        textView = (TextView)convertView.findViewById(R.id.edit_person_count);
-        textView.setText(String.valueOf(trip.getNoOfPersons()));
-
-        textView = (TextView)convertView.findViewById(R.id.edit_total_cost);
-        textView.setText(String.valueOf(trip.getTotalCost()));
+        holder.trip_title.setText(trip.getTripName());
+        holder.person_count.setText(String.valueOf(trip.getNoOfPersons()));
+        holder.total_cost.setText(String.valueOf(trip.getTotalCost()));
 
         return convertView;
     }

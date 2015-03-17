@@ -226,11 +226,13 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         if(noOfPersons < 1){
             intent = new Intent(EnterPersonDetailActivity.this, MainActivity.class);
             Toast.makeText(EnterPersonDetailActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }else {
             intent = new Intent(EnterPersonDetailActivity.this, EnterPersonDetailActivity.class);
             bundle.putInt("Trip_no_of_persons", noOfPersons);
             intent.putExtras(bundle);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
 

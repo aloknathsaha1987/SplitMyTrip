@@ -163,6 +163,7 @@ public class TripActivity extends Activity {
         }
         extras.putString("FragmentTagKey", ParentViewPagerFragment.TAG);
         intent.putExtras(extras);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         return intent;
     }
 

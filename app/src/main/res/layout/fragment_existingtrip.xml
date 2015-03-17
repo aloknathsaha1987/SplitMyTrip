@@ -5,24 +5,22 @@
     android:orientation="horizontal" >
 
     <com.aloknath.splitmytrip.CustomViews.RoundedImageView
-        android:layout_width="275dp"
-        android:layout_height="275dp"
+        android:layout_width="125dp"
+        android:layout_height="125dp"
         android:id="@+id/imageView2"
-        android:layout_marginLeft="55dp"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="85dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter Existing Trip"
         android:id="@+id/textView"
-        android:textSize="30sp"
+        android:textSize="20sp"
         android:textColor="#000000"
         android:layout_below="@+id/imageView2"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp" />
+        android:layout_marginTop="25dp" />
 
 
 </RelativeLayout>

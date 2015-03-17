@@ -1,6 +1,11 @@
 package com.aloknath.splitmytrip.Fragments;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,6 +43,8 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
     private static double amountOwed;
     private static double amountToGet;
     private onChildEvent childEventListener;
+    private AlertDialog.Builder alertDialog;
+    private double entered_amount = 0;
 
     public interface  onChildEvent {
         public void amountPaid(String tripName, String from, String to, double amount);
@@ -63,6 +71,8 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        alertDialog = new AlertDialog.Builder(getActivity());
 
     }
 
@@ -156,8 +166,8 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                     layoutParams.setMargins(10, 10, 10, 10); // (left, top, right, bottom)
                     textView2.setLayoutParams(layoutParams);
                     textView2.setText(recipient.getName() + " has to get $" + String.valueOf(amount) + " from " + sender.getName());
-                    textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                    textView2.setBackgroundColor(0xffffdbdb);
+                    textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    textView2.setTextColor(Color.BLACK);
                     linearLayout.addView(textView2);
 
                 }
@@ -187,8 +197,8 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                     layoutParams.setMargins(10, 10, 10, 10); // (left, top, right, bottom)
                     textView2.setLayoutParams(layoutParams);
                     textView2.setText(sender.getName() + " has to give $" + String.valueOf(amount) + " to " + recipient.getName());
-                    textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                    textView2.setBackgroundColor(0xffffdbdb);
+                    textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+                    textView2.setTextColor(Color.BLACK);
                     linearLayout.addView(textView2);
 
                     give = new Button(getActivity());
@@ -202,9 +212,44 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                     final Person receive = recipient;
                     final double amountPaid = amount;
                     give.setOnClickListener(new View.OnClickListener() {
+                        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
                         @Override
                         public void onClick(View view) {
-                            childEventListener.amountPaid(send.getTripName(), send.getName(), receive.getName(), amountPaid);
+                            LayoutInflater inflater = getLayoutInflater(null);
+                            View dialoglayout = inflater.inflate(R.layout.alert_dialog_entering_amount, null);
+
+                            alertDialog.setTitle("Amount To Pay");
+                            alertDialog.setView(dialoglayout);
+                            alertDialog.show();
+
+                            TextView textView = (TextView)dialoglayout.findViewById(R.id.textView3);
+                            textView.setText(String.valueOf(amountPaid));
+
+                            Button ok = (Button)dialoglayout.findViewById(R.id.button_ok);
+                            Button give_full = (Button)dialoglayout.findViewById(R.id.button_full_amount);
+                            final EditText amountEntered = (EditText)dialoglayout.findViewById(R.id.editText);
+                            ok.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    if(amountEntered.getText().toString().isEmpty()){
+                                        childEventListener.amountPaid(send.getTripName(), send.getName(), receive.getName(), 0);
+                                    }else{
+                                        entered_amount = Double.valueOf(amountEntered.getText().toString());
+                                        if(entered_amount > amountPaid || entered_amount < 0){
+                                            childEventListener.amountPaid(send.getTripName(), send.getName(), receive.getName(), 0);
+                                        }else {
+                                            childEventListener.amountPaid(send.getTripName(), send.getName(), receive.getName(), entered_amount);
+                                        }
+                                    }
+                                }
+                            });
+
+                            give_full.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    childEventListener.amountPaid(send.getTripName(), send.getName(), receive.getName(), amountPaid);
+                                }
+                            });
                         }
                     });
 

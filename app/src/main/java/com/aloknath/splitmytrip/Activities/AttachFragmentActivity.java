@@ -1,5 +1,6 @@
 package com.aloknath.splitmytrip.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -10,8 +11,10 @@ import com.aloknath.splitmytrip.Database.TripDataSource;
 import com.aloknath.splitmytrip.Fragments.ChildFragment;
 import com.aloknath.splitmytrip.Fragments.ParentViewPagerFragment;
 import com.aloknath.splitmytrip.Objects.Person;
+import com.aloknath.splitmytrip.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,6 +23,7 @@ import java.util.List;
 public class AttachFragmentActivity extends FragmentActivity implements ChildFragment.onChildEvent {
 
     private TripDataSource tripDataSource;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +48,29 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
 
     }
 
+    private void refreshDisplay(String tripName) {
+
+        // Refresh the fragment, i.e recalculate result and replace the old fragment by a new one
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentByTag(ParentViewPagerFragment.TAG);
+
+        if(fragment != null){
+           // fragment = Fragment.instantiate(this, ParentViewPagerFragment.TAG);
+            //fragment.setArguments(bundle);
+            FragmentTransaction ft = fragmentManager.beginTransaction();
+            ft.remove(fragment);
+            //ft.replace(android.R.id.content, fragment, ParentViewPagerFragment.TAG);
+            ft.commit();
+
+            Intent intent = new Intent(AttachFragmentActivity.this, TripActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("tripName", tripName);
+            intent.putExtras(bundle);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+        //fragmentTransaction.replace(R.id.fragmentNewTrip, fragment_new_trip.newInstance("New Trip"));
+    }
     @Override
     public void amountPaid(String tripName, String from, String to, double amount) {
         // Update the Tables Accordingly for the particular persons involved in the trip
@@ -56,19 +83,23 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
         Person recipient = tripDataSource.getPersonDetails(to, tripName);
         List<Person> persons = new ArrayList<>();
 
-        sender.setAmountOwed(sender.getAmountOwed() - amount);
-        sender.setAmountPaid(sender.getAmountPaid() + amount);
-        sender.setBalance(sender.getBalance() + amount);
-        recipient.setAmountToGet(recipient.getAmountToGet() - amount);
-        recipient.setBalance(recipient.getBalance() - amount);
+        //amountToGet = Math.round(amountToGet*100)/100.0d;
+
+        sender.setAmountOwed(Math.round((sender.getAmountOwed() - amount)*100)/100.0d);
+        sender.setAmountPaid(Math.round((sender.getAmountPaid() + amount)*100)/100.0d);
+        sender.setBalance(Math.round((sender.getBalance() + amount)*100)/100.0d);
+        recipient.setAmountToGet(Math.round((recipient.getAmountToGet() - amount)*100)/100.0d);
+        recipient.setBalance(Math.round((recipient.getBalance() - amount)*100)/100.0d);
+        recipient.setAmountPaid(Math.round((recipient.getAmountPaid() - amount)*100)/100.0d);
 
         persons.add(sender);
         persons.add(recipient);
         tripDataSource.updatePersonsPaid(persons);
-
+        refreshDisplay(tripName);
         tripDataSource.close();
 
     }
+
 
     @Override
     protected void onResume() {

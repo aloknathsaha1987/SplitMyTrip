@@ -89,6 +89,7 @@ public class EnterItemActivity extends FragmentActivity implements KeyBoardFragm
                 Toast.makeText(EnterItemActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
                 intent = new Intent(EnterItemActivity.this, EnterPersonDetailActivity.class);
                 intent.putExtras(bundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
@@ -108,6 +109,7 @@ public class EnterItemActivity extends FragmentActivity implements KeyBoardFragm
 
         intent = new Intent(EnterItemActivity.this, EnterItemActivity.class);
         intent.putExtras(bundle);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
     }

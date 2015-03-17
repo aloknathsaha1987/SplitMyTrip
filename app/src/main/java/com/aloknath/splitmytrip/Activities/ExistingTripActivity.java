@@ -88,6 +88,7 @@ public class ExistingTripActivity extends ListActivity {
         Bundle bundle = new Bundle();
         bundle.putString("tripName", tripSelected.getTripName());
         intent.putExtras(bundle);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 

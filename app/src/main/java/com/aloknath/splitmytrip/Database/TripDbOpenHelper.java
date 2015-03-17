@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class TripDbOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASENAME = "split_my_trip_v_1.4.db";
+    private static final String DATABASENAME = "split_my_trip_v_1.7.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String TRIPSTABLENAME = "Trips_Table";
@@ -23,6 +23,8 @@ public class TripDbOpenHelper extends SQLiteOpenHelper {
     public static final String ITERNARYTRIP = "itenary_trip";
     public static final String ITENARYNAME = "itenary_name";
     public static final String AMOUNT = "amount";
+   // public static final String TRIPITEMIMAGE = "item_image";
+
 
     public static final String PERSONTABLENAME = "Person_table";
     public static final String PERSONNAME = "person_name";
@@ -32,6 +34,7 @@ public class TripDbOpenHelper extends SQLiteOpenHelper {
     public static final String AMOUNTOWED = "amount_owed";
     public static final String AMOUNTTOGET = "amount_to_get";
     public static final String BALANCE = "balance";
+    public static final String PERSONIMAGE = "person_image";
 
     private static final String TABLECREATE_TRIPS_TABLE =
             "CREATE TABLE IF NOT EXISTS " + TRIPSTABLENAME + "(" +
@@ -46,6 +49,7 @@ public class TripDbOpenHelper extends SQLiteOpenHelper {
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     ITERNARYTRIP + " TEXT, " +
                     ITENARYNAME + " INTEGER, " +
+                   //TRIPITEMIMAGE + " BLOB, " +
                     AMOUNT + " BLOB " + ")";
 
     private static final String TABLECREATE_PERSON_TABLE =
@@ -57,6 +61,7 @@ public class TripDbOpenHelper extends SQLiteOpenHelper {
                     AMOUNTPAID + " BLOB, " +
                     AMOUNTOWED + " BLOB, " +
                     AMOUNTTOGET + " BLOB, " +
+                    PERSONIMAGE + " BLOB, " +
                     BALANCE + " BLOB " +")";
 
     public TripDbOpenHelper(Context context) {

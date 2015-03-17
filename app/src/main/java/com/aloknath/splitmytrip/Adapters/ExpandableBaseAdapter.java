@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import static com.aloknath.splitmytrip.ImageConversion.DbBitmapUtility.getImage;
+
 /**
  * Created by ALOKNATH on 3/11/2015.
  */
@@ -33,10 +35,12 @@ public class ExpandableBaseAdapter extends BaseExpandableListAdapter {
     private TextView textView;
     private HashMap<Integer, Bitmap> itemsHashMap = new HashMap<>();
     private HashMap<Integer, Bitmap> personsHashMap = new HashMap<>();
+    private HashMap<Integer, Bitmap> imagesPassed = new HashMap<>();
 
-    public ExpandableBaseAdapter(Context context, final TripActivity.TripItemsPersons tripItemsPersons){
+    public ExpandableBaseAdapter(Context context, final TripActivity.TripItemsPersons tripItemsPersons, HashMap<Integer, Bitmap> imagesPassed){
         this.context = context;
         this.tripItemsPersons = tripItemsPersons;
+        this.imagesPassed = imagesPassed;
     }
 
 
@@ -131,15 +135,10 @@ public class ExpandableBaseAdapter extends BaseExpandableListAdapter {
 
             if(itemsHashMap.get(childPosition) == null) {
 
-                try {
-                    InputStream inputStream = context.getAssets().open("new_trip.jpg");
-                    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                    Bitmap bitmap = BitmapFactory.decodeStream(bufferedInputStream);
-                    holderItem.imageView.setImageBitmap(bitmap);
-                    itemsHashMap.put(childPosition, bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Bitmap bitmap = imagesPassed.get(childPosition);
+                holderItem.imageView.setImageBitmap(bitmap);
+                itemsHashMap.put(childPosition, bitmap);
+
             }else{
                 holderItem.imageView.setImageBitmap(itemsHashMap.get(childPosition));
             }
@@ -171,34 +170,23 @@ public class ExpandableBaseAdapter extends BaseExpandableListAdapter {
 
             if(personsHashMap.get(childPosition) == null) {
 
-                try {
-                    InputStream inputStream = context.getAssets().open("splash_screen.jpg");
-                    BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-                    Bitmap bitmap = BitmapFactory.decodeStream(bufferedInputStream);
-                    holderPerson.imageView.setImageBitmap(bitmap);
-                    personsHashMap.put(childPosition, bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    holderPerson.imageView.setImageBitmap(person.getPersonImage());
+                    personsHashMap.put(childPosition, person.getPersonImage());
+
             }else{
                 holderPerson.imageView.setImageBitmap(personsHashMap.get(childPosition));
             }
 
-
             holderPerson.personName.setText(person.getName());
-
-
             holderPerson.amount_paid.setText("$" + String.valueOf(person.getAmountPaid()));
-
-
             holderPerson.amount_owed.setText("$" + String.valueOf(person.getAmountOwed()));
-
             holderPerson.amount_to_get.setText("$" + String.valueOf(person.getAmountToGet()));
-
         }
 
         return convertView;
     }
+
+
 
     @Override
     public boolean isChildSelectable(int i, int i2) {

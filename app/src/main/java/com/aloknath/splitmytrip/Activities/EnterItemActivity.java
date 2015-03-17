@@ -1,21 +1,27 @@
 package com.aloknath.splitmytrip.Activities;
 
-import android.app.Activity;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.aloknath.splitmytrip.Database.TripDataSource;
 import com.aloknath.splitmytrip.Fragments.KeyBoardFragment;
 import com.aloknath.splitmytrip.Objects.Trip;
 import com.aloknath.splitmytrip.Objects.TripItem;
 import com.aloknath.splitmytrip.R;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by ALOKNATH on 2/24/2015.
@@ -30,11 +36,25 @@ public class EnterItemActivity extends FragmentActivity implements KeyBoardFragm
     private TripDataSource tripDataSource;
     private EditText editText;
     private KeyBoardFragment keyboard_fragment;
+    private EditText itemName;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trip_item);
+
+        try
+        {
+            View view = getWindow().getDecorView().findViewById(R.id.scroll_view);
+            InputStream ims = getAssets().open("enter_trip.jpg");
+            Drawable d = Drawable.createFromStream(ims, null);
+            view.setBackground(d);
+
+        }catch(IOException ex)
+        {
+            return;
+        }
 
         tripDataSource = new TripDataSource(this);
         tripDataSource.open();
@@ -52,6 +72,8 @@ public class EnterItemActivity extends FragmentActivity implements KeyBoardFragm
                 finish();
             }
         });
+
+        itemName = (EditText)findViewById(R.id.enter_trip_item);
 
         editText = (EditText)findViewById(R.id.edit_trip_item_cost);
         editText.setOnClickListener(new View.OnClickListener() {
@@ -85,25 +107,46 @@ public class EnterItemActivity extends FragmentActivity implements KeyBoardFragm
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveToDb();
-                Toast.makeText(EnterItemActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
-                intent = new Intent(EnterItemActivity.this, EnterPersonDetailActivity.class);
-                intent.putExtras(bundle);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+                if(itemName.getText().toString().isEmpty() || editText.getText().toString().isEmpty()) {
+                    Toast.makeText(EnterItemActivity.this, "Enter Item Name And The Cost", Toast.LENGTH_SHORT).show();
+
+                }else
+                {
+                    nextClick();
+                }
+
             }
         });
 
         save_enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                saveToDb();
-                Toast.makeText(EnterItemActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
-                refreshDisplay();
+
+                if(itemName.getText().toString().isEmpty() || editText.getText().toString().isEmpty()) {
+                    Toast.makeText(EnterItemActivity.this, "Enter Item Name And The Cost", Toast.LENGTH_SHORT).show();
+
+                }else
+                {
+                    saveToDb();
+                    Toast.makeText(EnterItemActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
+                    refreshDisplay();
+
+                }
             }
         });
 
     }
+
+    private void nextClick() {
+
+        saveToDb();
+        Toast.makeText(this, "Item Saved", Toast.LENGTH_SHORT).show();
+        intent = new Intent(this, EnterPersonDetailActivity.class);
+        intent.putExtras(bundle);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
 
     private void refreshDisplay() {
 

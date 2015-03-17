@@ -13,6 +13,9 @@ import com.aloknath.splitmytrip.Objects.TripItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.aloknath.splitmytrip.ImageConversion.DbBitmapUtility.getBytes;
+import static com.aloknath.splitmytrip.ImageConversion.DbBitmapUtility.getImage;
+
 /**
  * Created by ALOKNATH on 2/24/2015.
  */
@@ -30,7 +33,8 @@ public class TripDataSource {
     public static final String[] allItenaryTableColumns =
             {TripDbOpenHelper.ITERNARYTRIP,
                     TripDbOpenHelper.ITENARYNAME,
-                    TripDbOpenHelper.AMOUNT};
+                    TripDbOpenHelper.AMOUNT
+                   };
 
     public static final String[] allPersonTableColumns =
             {TripDbOpenHelper.PERSONNAME,
@@ -39,7 +43,8 @@ public class TripDataSource {
                     TripDbOpenHelper.AMOUNTPAID,
                     TripDbOpenHelper.AMOUNTOWED,
                     TripDbOpenHelper.AMOUNTTOGET,
-                    TripDbOpenHelper.BALANCE};
+                    TripDbOpenHelper.BALANCE,
+                    TripDbOpenHelper.PERSONIMAGE};
 
 
     public TripDataSource(Context context){
@@ -77,6 +82,7 @@ public class TripDataSource {
         contentValues.put(TripDbOpenHelper.ITERNARYTRIP, tripItem.getTripName());
         contentValues.put(TripDbOpenHelper.ITENARYNAME, tripItem.getItemName());
         contentValues.put(TripDbOpenHelper.AMOUNT, tripItem.getItemCost());
+        //contentValues.put(TripDbOpenHelper.TRIPITEMIMAGE, getBytes(tripItem.getTripItemImage()));
 
         long insertId = sqLiteDatabase.insert(TripDbOpenHelper.ITENARYTABLENAME, null, contentValues);
         return (insertId != -1);
@@ -94,6 +100,7 @@ public class TripDataSource {
         contentValues.put(TripDbOpenHelper.AMOUNTOWED, person.getAmountOwed());
         contentValues.put(TripDbOpenHelper.AMOUNTTOGET, person.getAmountToGet());
         contentValues.put(TripDbOpenHelper.BALANCE, person.getBalance());
+        contentValues.put(TripDbOpenHelper.PERSONIMAGE, getBytes( person.getPersonImage()));
 
         long insertId = sqLiteDatabase.insert(TripDbOpenHelper.PERSONTABLENAME, null, contentValues);
         return (insertId != -1);
@@ -152,6 +159,7 @@ public class TripDataSource {
                 person.setAmountToGet(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTTOGET)));
                 person.setAmountOwed(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTOWED)));
                 person.setBalance(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.BALANCE)));
+                person.setPersonImage(getImage(cursor.getBlob(cursor.getColumnIndex(TripDbOpenHelper.PERSONIMAGE))));
                 persons.add(person);
             }
         }
@@ -180,6 +188,7 @@ public class TripDataSource {
             while (cursor.moveToNext()) {
                 TripItem item = new TripItem(cursor.getString(cursor.getColumnIndex(TripDbOpenHelper.ITENARYNAME)), tripName);
                 item.setItemCost(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNT)));
+              //  item.setTripItemImage(getImage(cursor.getBlob(cursor.getColumnIndex(TripDbOpenHelper.TRIPITEMIMAGE))));
                 items.add(item);
             }
         }
@@ -203,7 +212,7 @@ public class TripDataSource {
                 person.setAmountOwed(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTOWED)));
                 person.setAmountToGet(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTTOGET)));
                 person.setBalance(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.BALANCE)));
-
+                person.setPersonImage(getImage(cursor.getBlob(cursor.getColumnIndex(TripDbOpenHelper.PERSONIMAGE))));
             }
         }
 
@@ -221,8 +230,9 @@ public class TripDataSource {
 
         if (cursor.getCount()> 0) {
             while (cursor.moveToNext()) {
+
                 item.setItemCost(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNT)));
-                item.setItemCost(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNT)));
+              //  item.setTripItemImage(getImage(cursor.getBlob(cursor.getColumnIndex(TripDbOpenHelper.TRIPITEMIMAGE))));
             }
         }
         return item;

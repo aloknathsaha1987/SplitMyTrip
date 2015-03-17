@@ -1,6 +1,12 @@
 package com.aloknath.splitmytrip.Objects;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * Created by ALOKNATH on 2/24/2015.
@@ -8,7 +14,7 @@ import android.graphics.Bitmap;
 public class Person extends Trip implements Comparable<Person>, java.io.Serializable{
     private final String name;
     private String contactNo;
-    private Bitmap personImage;
+    private transient Bitmap personImage;
     private double amountPaid;
     private double amountOwed;
     private double amountToGet;
@@ -85,5 +91,30 @@ public class Person extends Trip implements Comparable<Person>, java.io.Serializ
 
         int balance = (int) person.getBalance();
         return (int) (this.getBalance() - balance);
+    }
+
+    private void writeObject(ObjectOutputStream oos) throws IOException{
+        // This will serialize all fields that you did not mark with 'transient'
+        // (Java's default behaviour)
+        oos.defaultWriteObject();
+        // Now, manually serialize all transient fields that you want to be serialized
+        if(personImage!=null){
+            ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+            boolean success = personImage.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+            if(success){
+                oos.writeObject(byteStream.toByteArray());
+            }
+        }
+    }
+
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException{
+        // Now, all again, deserializing - in the SAME ORDER!
+        // All non-transient fields
+        ois.defaultReadObject();
+        // All other fields that you serialized
+        byte[] image = (byte[]) ois.readObject();
+        if(image != null && image.length > 0){
+            personImage = BitmapFactory.decodeByteArray(image, 0, image.length);
+        }
     }
 }

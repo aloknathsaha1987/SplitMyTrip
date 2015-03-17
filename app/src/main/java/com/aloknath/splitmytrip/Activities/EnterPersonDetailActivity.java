@@ -1,26 +1,42 @@
 package com.aloknath.splitmytrip.Activities;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Contacts;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.aloknath.splitmytrip.Database.TripDataSource;
 import com.aloknath.splitmytrip.Fragments.KeyBoardFragment;
 import com.aloknath.splitmytrip.Objects.Person;
 import com.aloknath.splitmytrip.Objects.Trip;
 import com.aloknath.splitmytrip.R;
+
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,15 +57,30 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
     private ProgressDialog progressDialog;
     private KeyBoardFragment keyboard_fragment;
     private EditText enterCost;
+    private InputStream photoStream;
+    private Bitmap bitmap;
 
     Button cancel;
     Button next;
     private TripDataSource tripDataSource;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.enter_person);
+
+        try
+        {
+            View view = getWindow().getDecorView().findViewById(R.id.scroll_view);
+            InputStream ims = getAssets().open("enter_trip.jpg");
+            Drawable d = Drawable.createFromStream(ims, null);
+            view.setBackground(d);
+
+        }catch(IOException ex)
+        {
+            return;
+        }
 
         progressDialog = new ProgressDialog(EnterPersonDetailActivity.this);
 
@@ -140,7 +171,7 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
 
     }
 
-    private class SearchPhoneAsyncTask extends AsyncTask<String, Void, Map<String, String>> {
+    private class SearchPhoneAsyncTask extends AsyncTask<String, Void, HashMap<String, Object>> {
 
         @Override
         protected void onPreExecute() {
@@ -151,10 +182,13 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         }
 
         @Override
-        protected Map<String, String> doInBackground(String... strings) {
+        protected HashMap<String, Object> doInBackground(String... strings) {
 
             String personNamePassed = strings[0];
-            Map<String, String> personDetails = new HashMap<>();
+            HashMap<String, Object> personDetails = new HashMap<>(3, 1.0f);
+            //Map<String, Object> personImage = new HashMap<>(1, 1.0f);
+            //List<HashMap<String, Object>> personInfo = new ArrayList<>(2);
+            InputStream inputStream;
 
             String HAS_PHONE_NUMBER = ContactsContract.Contacts.HAS_PHONE_NUMBER;
             ContentResolver contentResolver = getContentResolver();
@@ -164,6 +198,7 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
             Uri EmailCONTENT_URI =  ContactsContract.CommonDataKinds.Email.CONTENT_URI;
             String EmailCONTACT_ID = ContactsContract.CommonDataKinds.Email.CONTACT_ID;
             String DATA = ContactsContract.CommonDataKinds.Email.DATA;
+            //String photoUri = ContactsContract.CommonDataKinds.Photo.PHOTO_URI;
 
             Uri lkup = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_FILTER_URI, personNamePassed);
             Cursor idCursor = getContentResolver().query(lkup, null, null, null, null);
@@ -188,6 +223,11 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
 
                     }
                     emailCursor.close();
+
+                    Uri my_contact_Uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, id);
+
+                    inputStream =  ContactsContract.Contacts.openContactPhotoInputStream(getContentResolver(), my_contact_Uri);
+                    personDetails.put("image", inputStream);
                 }
             }
             idCursor.close();
@@ -196,11 +236,12 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         }
 
         @Override
-        protected void onPostExecute(Map<String, String> stringStringMap) {
+        protected void onPostExecute(HashMap<String, Object> stringStringMap) {
             super.onPostExecute(stringStringMap);
             progressDialog.hide();
-            phoneNumber = stringStringMap.get("phoneNumber");
-            email = stringStringMap.get("email");
+            phoneNumber = (String) stringStringMap.get("phoneNumber");
+            email = (String) stringStringMap.get("email");
+            photoStream = (InputStream)stringStringMap.get("image");
             refreshTextBoxDisplay();
         }
     }
@@ -218,6 +259,12 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         if(email != null){
             editText = (EditText)findViewById(R.id.enter_person_email);
             editText.setText(email);
+        }
+        if(photoStream != null){
+            ImageView photo = (ImageView)findViewById(R.id.imageView_person);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(photoStream);
+            bitmap = BitmapFactory.decodeStream(bufferedInputStream);
+            photo.setImageBitmap(bitmap);
         }
     }
 
@@ -299,7 +346,8 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         person.setAmountPaid(amount);
         person.setAmountOwed(amountOwed);
         person.setAmountToGet(amountToGet);
-        person.setBalance(amount - amountPerHead );
+        person.setBalance(amount - amountPerHead);
+        person.setPersonImage(bitmap);
 
         tripDataSource.addPerson(person);
         tripDataSource.close();

@@ -4,6 +4,8 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,18 +18,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aloknath.splitmytrip.Activities.TripActivity;
 import com.aloknath.splitmytrip.Objects.Person;
 import com.aloknath.splitmytrip.Objects.TripItem;
 import com.aloknath.splitmytrip.R;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+
+import static com.aloknath.splitmytrip.ImageConversion.DbBitmapUtility.getImage;
 
 /**
  * Created by ALOKNATH on 3/14/2015.
@@ -45,6 +54,8 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
     private onChildEvent childEventListener;
     private AlertDialog.Builder alertDialog;
     private double entered_amount = 0;
+    private ImageView imageView;
+
 
     public interface  onChildEvent {
         public void amountPaid(String tripName, String from, String to, double amount);
@@ -105,6 +116,9 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             textView = (TextView)root.findViewById(R.id.edit_amount_paid);
             textView.setText("$" + String.valueOf(personsList.get(position).getAmountPaid()));
 
+            imageView = (ImageView)root.findViewById(R.id.imageView2);
+            imageView.setImageBitmap(personsList.get(position).getPersonImage());
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
             Split(root, position);
         }
         else{
@@ -112,7 +126,6 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             root = inflater.inflate(R.layout.fragment_child_item, container, false);
 
             tripItemList = (HashMap<Integer, TripItem>) getArguments().getSerializable("hashMap");
-
 
             textView = (TextView)root.findViewById(R.id.item_name);
             textView.setText(tripItemList.get(position).getItemName());
@@ -123,10 +136,175 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             textView = (TextView)root.findViewById(R.id.edit_item_cost);
             textView.setText(String.valueOf(tripItemList.get(position).getItemCost()));
 
+            imageView = (ImageView)root.findViewById(R.id.imageView2);
+            imageView.setImageBitmap(setItemImage(tripItemList.get(position).getItemName()));
+            imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
         }
 
         return root;
     }
+
+    private Bitmap setItemImage(String imageName) {
+
+        InputStream inputStream = null;
+        Bitmap imageReturned = null;
+
+        if(imageName.equals("Travel") || imageName.equals("travel")||imageName.equals("TRAVEL")){
+
+            try {
+                inputStream = getActivity().getAssets().open("travel.png");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Adventure") || imageName.equals("adventure")||imageName.equals("ADVENTURE")){
+
+            try {
+                inputStream = getActivity().getAssets().open("adventure.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Hiking") || imageName.equals("hiking")||imageName.equals("HIKING")||imageName.equals("Trekking")||imageName.equals("trekking")||imageName.equals("TREKKING")){
+
+            try {
+                inputStream = getActivity().getAssets().open("hiking.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Food") || imageName.equals("food")||imageName.equals("FOOD")){
+
+            try {
+                inputStream = getActivity().getAssets().open("food.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Water") || imageName.equals("water")||imageName.equals("WATER")){
+
+            try {
+                inputStream = getActivity().getAssets().open("water.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Hotel") || imageName.equals("hotel")||imageName.equals("HOTEL")){
+
+            try {
+                inputStream = getActivity().getAssets().open("hotel.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+
+        }else if(imageName.equals("Bar") || imageName.equals("bar")||imageName.equals("BAR")||imageName.equals("Drinks")||imageName.equals("drinks")||imageName.equals("DRINKS")||imageName.equals("Disco")||imageName.equals("disco")||imageName.equals("disco")||imageName.equals("Pub")||imageName.equals("pub")||imageName.equals("PUB")||imageName.equals("Drink")||imageName.equals("drink")||imageName.equals("DRINK")){
+
+            try {
+                inputStream = getActivity().getAssets().open("bar.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Fuel") || imageName.equals("fuel")||imageName.equals("FUEL")||imageName.equals("Car")||imageName.equals("car")||imageName.equals("CAR")||imageName.equals("Gas")||imageName.equals("gas")||imageName.equals("GAS")){
+
+            try {
+                inputStream = getActivity().getAssets().open("fuel.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Museum") || imageName.equals("museum")||imageName.equals("Museum")||imageName.equals("Gallery")||imageName.equals("gallery")||imageName.equals("gallery")){
+
+            try {
+                inputStream = getActivity().getAssets().open("museum.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Aquarium") || imageName.equals("aquarium")||imageName.equals("AQUARIUM")){
+
+            try {
+                inputStream = getActivity().getAssets().open("aquarium.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Park") || imageName.equals("park")||imageName.equals("PARK")){
+
+            try {
+                inputStream = getActivity().getAssets().open("park.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Train") || imageName.equals("train")||imageName.equals("TRAIN")){
+
+            try {
+                inputStream = getActivity().getAssets().open("train.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Bus") || imageName.equals("bus")||imageName.equals("BUS")){
+
+            try {
+                inputStream = getActivity().getAssets().open("bus.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Shopping") || imageName.equals("shopping")||imageName.equals("SHOPPING")){
+
+            try {
+                inputStream = getActivity().getAssets().open("shopping.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }else if(imageName.equals("Beach") || imageName.equals("beach")||imageName.equals("BEACH")){
+
+            try {
+                inputStream = getActivity().getAssets().open("beach.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+        }
+
+        return imageReturned;
+    }
+
 
     private void Split(View root, int position) {
         LinearLayout linearLayout = (LinearLayout)root.findViewById(R.id.linearlayout);

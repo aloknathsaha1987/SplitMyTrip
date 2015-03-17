@@ -1,8 +1,11 @@
 package com.aloknath.splitmytrip.Activities;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +15,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aloknath.splitmytrip.CustomViews.EditTextNoKeyBoard;
@@ -19,6 +23,9 @@ import com.aloknath.splitmytrip.Database.TripDataSource;
 import com.aloknath.splitmytrip.Fragments.KeyBoardFragment;
 import com.aloknath.splitmytrip.Objects.Trip;
 import com.aloknath.splitmytrip.R;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by ALOKNATH on 2/24/2015.
@@ -30,18 +37,24 @@ public class NewTripActivity extends FragmentActivity implements KeyBoardFragmen
     private Button next;
     private KeyBoardFragment keyboard_fragment;
     private EditText editText;
-    private EditTextNoKeyBoard enter_count;
-//    private View.OnTouchListener otl = new View.OnTouchListener() {
-//        public boolean onTouch (View v, MotionEvent event) {
-//            ((EditText)v).requestFocus();
-//            return true; // the listener has consumed the event
-//        }
-//    };
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.trip_location);
+
+        try
+        {
+            View view = getWindow().getDecorView().findViewById(android.R.id.content);
+            InputStream ims = getAssets().open("enter_trip.jpg");
+            Drawable d = Drawable.createFromStream(ims, null);
+            view.setBackground(d);
+
+        }catch(IOException ex)
+        {
+            return;
+        }
 
         cancel = (Button)findViewById(R.id.button_cancel);
         next = (Button)findViewById(R.id.button_next);
@@ -99,7 +112,6 @@ public class NewTripActivity extends FragmentActivity implements KeyBoardFragmen
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
 
-               // saveToDb();
             }
         });
 

@@ -1,7 +1,5 @@
 package com.aloknath.splitmytrip.Objects;
 
-import android.graphics.Bitmap;
-
 /**
  * Created by ALOKNATH on 2/24/2015.
  */
@@ -9,6 +7,7 @@ public class TripItem extends Trip implements java.io.Serializable{
 
     private final String itemName;
     private double itemCost;
+    //private transient Bitmap tripItemImage;
 
     public TripItem( String itemName, String tripName) {
         super(tripName);
@@ -26,4 +25,6 @@ public class TripItem extends Trip implements java.io.Serializable{
     public void setItemCost(double itemCost) {
         this.itemCost = itemCost;
     }
+
+
 }

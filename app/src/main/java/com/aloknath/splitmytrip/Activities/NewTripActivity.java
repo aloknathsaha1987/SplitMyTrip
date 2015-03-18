@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.aloknath.splitmytrip.CustomViews.EditTextNoKeyBoard;
 import com.aloknath.splitmytrip.Database.TripDataSource;
@@ -37,6 +38,8 @@ public class NewTripActivity extends FragmentActivity implements KeyBoardFragmen
     private Button next;
     private KeyBoardFragment keyboard_fragment;
     private EditText editText;
+    private EditText tripTitle;
+    private EditText tripPersonCount;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -98,19 +101,23 @@ public class NewTripActivity extends FragmentActivity implements KeyBoardFragmen
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(NewTripActivity.this, EnterItemActivity.class);
-                Bundle bundle = new Bundle();
+                tripTitle = (EditText)findViewById(R.id.edit_trip_location);
+                tripPersonCount = (EditText)findViewById(R.id.edit_trip_no_persons);
 
-                editText = (EditText)findViewById(R.id.edit_trip_location);
-                bundle.putString("Trip_title", editText.getText().toString());
+                if(tripTitle.getText().toString().isEmpty() || tripPersonCount.getText().toString().isEmpty()){
+                    Toast.makeText(NewTripActivity.this,"Enter The Trip Title and the Person Count !!", Toast.LENGTH_SHORT).show();
+                }else{
 
-                editText = (EditText)findViewById(R.id.edit_trip_no_persons);
-                bundle.putInt("Trip_no_of_persons", Integer.parseInt(editText.getText().toString()));
+                    Intent intent = new Intent(NewTripActivity.this, EnterItemActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Trip_title", tripTitle.getText().toString());
+                    bundle.putInt("Trip_no_of_persons", Integer.parseInt(tripPersonCount.getText().toString()));
+                    intent.putExtras(bundle);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
 
-                intent.putExtras(bundle);
+                }
 
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
 
             }
         });

@@ -5,16 +5,17 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 
 import com.aloknath.splitmytrip.Database.TripDataSource;
 import com.aloknath.splitmytrip.Fragments.ChildFragment;
 import com.aloknath.splitmytrip.Fragments.ParentViewPagerFragment;
 import com.aloknath.splitmytrip.Objects.Person;
-import com.aloknath.splitmytrip.R;
+import com.aloknath.splitmytrip.Objects.Trip;
+import com.aloknath.splitmytrip.Objects.TripItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -96,6 +97,110 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
         persons.add(recipient);
         tripDataSource.updatePersonsPaid(persons);
         refreshDisplay(tripName);
+        tripDataSource.close();
+
+    }
+
+    @Override
+    public void editPerson(Person person, double newAmountPaid, List<HashMap<String, Object>> result) {
+
+        //Pass the list of sorted data to this function and update the person/ persons associated with the data
+
+        /*
+           I have got the list passed into this function
+
+           Now, the person's updated object is at the end of the code.
+
+           get that,
+           From the list, check if the particular person had to pay to person/ persons
+           If yes, then deduct the amount form the person/persons and update the person's list.
+
+         */
+
+        Trip personTrip = tripDataSource.getTrip(person.getTripName());
+
+        double oldAmountPaid = person.getAmountPaid();
+        person.setAmountPaid(newAmountPaid);
+        if(newAmountPaid > oldAmountPaid) {
+            person.setBalance((newAmountPaid - oldAmountPaid) - personTrip.getAmountPerHead());
+            if(person.getAmountOwed()>0) {
+                if((person.getAmountOwed() - (newAmountPaid- oldAmountPaid))>0) {
+                    person.setAmountOwed(person.getAmountOwed() - (newAmountPaid- oldAmountPaid));
+                }else{
+
+                    person.setAmountToGet((newAmountPaid- oldAmountPaid) - person.getAmountOwed() );
+                    person.setAmountOwed(0);
+                }
+            }
+
+        }else{
+            person.setBalance((oldAmountPaid - newAmountPaid) - personTrip.getAmountPerHead());
+
+            if(person.getAmountOwed()>0) {
+                person.setAmountOwed(person.getAmountOwed() - ( oldAmountPaid - newAmountPaid));
+
+//                if((person.getAmountOwed() - ( oldAmountPaid - newAmountPaid))>0) {
+//                    person.setAmountOwed(person.getAmountOwed() - ( oldAmountPaid - newAmountPaid));
+//                }else{
+//
+//                    person.setAmountToGet((oldAmountPaid - newAmountPaid) - person.getAmountOwed() );
+//                    person.setAmountOwed(0);
+//                }
+            }
+        }
+
+        tripDataSource.updatePerson(person);
+
+        Iterator iterator = result.iterator();
+        Person sender;
+        Person recipient;
+        double amount;
+
+        while (iterator.hasNext()) {
+
+            HashMap<String, Object> mapReturned = (HashMap<String, Object>) iterator.next();
+            sender = (Person) mapReturned.get("from");
+            recipient = (Person) mapReturned.get("to");
+
+            if(sender.getName().equals(person.getName())){
+
+                if(sender.getAmountOwed() > (newAmountPaid - sender.getAmountPaid())){
+                    amount = (newAmountPaid - sender.getAmountPaid());
+
+                }else{
+                    amount = sender.getAmountOwed();
+                }
+                amount = Math.round(amount * 100) / 100.0d;
+                // just have to update the recipient
+                recipient.setAmountToGet(Math.round((recipient.getAmountToGet() - amount)*100)/100.0d);
+                recipient.setBalance(Math.round((recipient.getBalance() - amount)*100)/100.0d);
+                recipient.setAmountPaid(Math.round((recipient.getAmountPaid() - amount)*100)/100.0d);
+
+                // Update the recipient in the Database
+                tripDataSource.updatePerson(recipient);
+
+            }
+        }
+
+        refreshDisplay(person.getTripName());
+        tripDataSource.close();
+    }
+
+    @Override
+    public void editItem(TripItem item, double newItemAmount) {
+
+        Trip itemTrip = tripDataSource.getTrip(item.getTripName());
+
+        TripItem checkerTripItem = tripDataSource.getTripItem(item.getTripName(), item.getItemName());
+
+        itemTrip.setTotalCost(itemTrip.getTotalCost() - checkerTripItem.getItemCost() + newItemAmount);
+        itemTrip.setAmountPerHead(itemTrip.getTotalCost()/ itemTrip.getNoOfPersons());
+        item.setItemCost(newItemAmount);
+
+
+        tripDataSource.updateTrip(itemTrip);
+        tripDataSource.updateTripItem(item);
+        refreshDisplay(item.getTripName());
         tripDataSource.close();
 
     }

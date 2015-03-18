@@ -1,122 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent" android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:id="@+id/relativeLayout"
-    >
 
-        <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/imageView2"
-        android:layout_alignParentTop="true"
-        android:background="#ff34ffd8"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="25dp"/>
 
-        <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Person Name"
-        android:textSize="25sp"
-        android:textColor="#000000"
-        android:id="@+id/person_name"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_toRightOf="@+id/imageView2"
-        android:layout_toEndOf="@+id/imageView2"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="65dp"/>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent" android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:id="@+id/relativeLayout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AMOUNT PAID: "
-        android:textSize="20sp"
-        android:textColor="#000000"
-        android:id="@+id/amount_paid"
-        android:layout_below="@+id/imageView2"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="$250"
-        android:textSize="25sp"
-        android:textColor="#000000"
-        android:id="@+id/edit_amount_paid"
-        android:layout_alignTop="@+id/amount_paid"
-        android:layout_toRightOf="@+id/amount_paid"
-        android:layout_toEndOf="@+id/amount_paid"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        />
+            <ImageView
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/imageView2"
+            android:layout_alignParentTop="true"
+            android:background="#ff34ffd8"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"/>
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AMOUNT TO GET: "
-        android:textSize="20sp"
-        android:textColor="#000000"
-        android:id="@+id/amount_to_get"
-        android:layout_below="@+id/amount_paid"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AMOUNT PAID "
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:id="@+id/amount_paid"
+            android:layout_marginTop="10dp"
+            android:layout_alignTop="@+id/imageView2"
+            android:layout_toRightOf="@+id/imageView2"
+            android:layout_toEndOf="@+id/imageView2"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"/>
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="$150"
-        android:textSize="25sp"
-        android:textColor="#000000"
-        android:id="@+id/edit_amount_to_get"
-        android:layout_alignTop="@+id/amount_to_get"
-        android:layout_toRightOf="@+id/amount_to_get"
-        android:layout_toEndOf="@+id/amount_to_get"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$250"
+            android:textSize="25sp"
+            android:textColor="#000000"
+            android:id="@+id/edit_amount_paid"
+            android:layout_below="@+id/amount_paid"
+            android:layout_toRightOf="@+id/imageView2"
+            android:layout_toEndOf="@+id/imageView2"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"/>
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AMOUNT OWED: "
-        android:textSize="20sp"
-        android:textColor="#000000"
-        android:id="@+id/amount_owed"
-        android:layout_below="@+id/amount_to_get"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AMOUNT TO GET "
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:id="@+id/amount_to_get"
+            android:layout_below="@+id/edit_amount_paid"
+            android:layout_toRightOf="@+id/imageView2"
+            android:layout_toEndOf="@+id/imageView2"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp" />
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="$15"
-        android:textSize="25sp"
-        android:textColor="#000000"
-        android:id="@+id/edit_amount_owed"
-        android:layout_alignTop="@+id/amount_owed"
-        android:layout_toRightOf="@+id/amount_owed"
-        android:layout_toEndOf="@+id/amount_owed"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$150"
+            android:textSize="25sp"
+            android:textColor="#000000"
+            android:id="@+id/edit_amount_to_get"
+            android:layout_below="@+id/amount_to_get"
+            android:layout_toRightOf="@+id/imageView2"
+            android:layout_toEndOf="@+id/imageView2"
+            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp" />
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AMOUNT OWED "
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:id="@+id/amount_owed"
+            android:layout_below="@+id/imageView2"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$15"
+            android:textSize="25sp"
+            android:textColor="#000000"
+            android:id="@+id/edit_amount_owed"
+            android:layout_below="@+id/imageView2"
+            android:layout_toRightOf="@+id/amount_owed"
+            android:layout_toEndOf="@+id/amount_owed"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="22dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EDIT AMOUNT PAID "
+            android:textSize="20sp"
+            android:textColor="#000000"
+            android:id="@+id/edit_amount_paid_to"
             android:layout_below="@+id/amount_owed"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="15dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:id="@+id/linearlayout"
-            android:background="#ff4cc7ff">
+            android:layout_alignLeft="@+id/amount_owed"
+            android:layout_alignStart="@+id/amount_owed"
+            android:layout_marginTop="15dp"/>
 
-        </LinearLayout>
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:background="#ff0af4d9"
+            android:hint="Amount"
+            android:id="@+id/edit_amount"
+            android:inputType="phone"
+            android:digits="1234567890"
+            android:layout_below="@+id/edit_amount_paid_to"
+            android:layout_alignLeft="@+id/edit_amount_paid_to"
+            android:layout_alignStart="@+id/edit_amount_paid_to"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/button_save_person"
+            android:layout_below="@+id/edit_amount_paid_to"
+            android:layout_alignRight="@+id/edit_amount_to_get"
+            android:layout_alignEnd="@+id/edit_amount_to_get"
+            android:layout_marginTop="3dp"/>
+ <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/scroll_view"
+        android:layout_below="@+id/button_save_person"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/linearlayout"/>
+
+</ScrollView>
+
     </RelativeLayout>
+

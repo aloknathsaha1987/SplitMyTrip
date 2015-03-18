@@ -219,24 +219,6 @@ public class TripDataSource {
         return person;
     }
 
-    public TripItem getItemDetails(String itemName, String itemTrip){
-
-        TripItem item = new TripItem(itemName, itemTrip);
-
-        sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
-
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TripDbOpenHelper.TRIPSTABLENAME +
-                " WHERE itenary_name like '%" + itemName + "%' AND itenary_trip like '%" + itemTrip + "%'", null);
-
-        if (cursor.getCount()> 0) {
-            while (cursor.moveToNext()) {
-
-                item.setItemCost(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNT)));
-              //  item.setTripItemImage(getImage(cursor.getBlob(cursor.getColumnIndex(TripDbOpenHelper.TRIPITEMIMAGE))));
-            }
-        }
-        return item;
-    }
 
     public Trip getTrip(String tripName){
         Trip trip = new Trip(tripName);
@@ -275,7 +257,6 @@ public class TripDataSource {
 
     }
 
-
     public void removeTrip(Trip trip) {
 
         // Remove the Trip and the associated persons from all the three tables;
@@ -303,5 +284,53 @@ public class TripDataSource {
                     TripDbOpenHelper.PERSONTRIP + " = ? AND " + TripDbOpenHelper.PERSONNAME + " = ?",
                     new String[] { person.getTripName(), person.getName() });
         }
+    }
+
+    public void updatePerson(Person person) {
+
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TripDbOpenHelper.AMOUNTPAID, person.getAmountPaid());
+        contentValues.put(TripDbOpenHelper.AMOUNTOWED, person.getAmountOwed());
+        contentValues.put(TripDbOpenHelper.AMOUNTTOGET, person.getAmountToGet());
+        contentValues.put(TripDbOpenHelper.BALANCE, person.getBalance());
+
+        sqLiteDatabase.update(TripDbOpenHelper.PERSONTABLENAME, contentValues,
+                TripDbOpenHelper.PERSONTRIP + " = ? AND " + TripDbOpenHelper.PERSONNAME + " = ?",
+                new String[] { person.getTripName(), person.getName() });
+    }
+
+    public void updateTripItem(TripItem item) {
+
+        sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(TripDbOpenHelper.ITERNARYTRIP, item.getTripName());
+        contentValues.put(TripDbOpenHelper.ITENARYNAME, item.getItemName());
+        contentValues.put(TripDbOpenHelper.AMOUNT, item.getItemCost());
+
+        sqLiteDatabase.update(TripDbOpenHelper.ITENARYTABLENAME, contentValues,
+                TripDbOpenHelper.ITERNARYTRIP + " = ? AND " + TripDbOpenHelper.ITENARYNAME + " = ?",
+                new String[]{item.getTripName(), item.getItemName()});
+
+
+    }
+
+    public TripItem getTripItem(String itemTrip, String itemName) {
+
+        TripItem item = new TripItem(itemName, itemTrip);
+
+        sqLiteDatabase = sqLiteOpenHelper.getReadableDatabase();
+
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TripDbOpenHelper.ITENARYTABLENAME +
+                " WHERE itenary_name like '%" + itemName + "%' AND itenary_trip like '%" + itemTrip + "%'", null);
+
+        if (cursor.getCount()> 0) {
+            while (cursor.moveToNext()) {
+                item.setItemCost(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNT)));
+            }
+        }
+        return item;
     }
 }

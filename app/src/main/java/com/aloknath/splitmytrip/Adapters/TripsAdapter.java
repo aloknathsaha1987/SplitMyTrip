@@ -1,15 +1,21 @@
 package com.aloknath.splitmytrip.Adapters;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aloknath.splitmytrip.Objects.Trip;
 import com.aloknath.splitmytrip.R;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -19,6 +25,7 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
 
     private Context context;
     private List<Trip> tripList;
+    private String[] tripImages = new String[]{"existing_trip.jpg","trip1.jpg" , "trip2.jpg", "new_trip.jpg", "park.jpg","beach.jpg"};
 
     public TripsAdapter(Context context, int resource,  List<Trip> items) {
         super(context, resource , items);
@@ -32,6 +39,7 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
         TextView total_cost;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -45,6 +53,29 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
             convertView.setTag(viewHolder);
         }
 
+        int modPosition = position % 6;
+        switch (modPosition){
+            case 0:
+                tripImageChange(convertView, tripImages[0]);
+                break;
+            case 1:
+                tripImageChange(convertView, tripImages[1]);
+                break;
+            case 2:
+                tripImageChange(convertView, tripImages[2]);
+                break;
+            case 3:
+                tripImageChange(convertView, tripImages[3]);
+                break;
+            case 4:
+                tripImageChange(convertView, tripImages[4]);
+                break;
+            case 5:
+                tripImageChange(convertView, tripImages[5]);
+                break;
+            default:
+                break;
+        }
         Trip trip = getItem(position);
         ViewHolder holder = (ViewHolder)convertView.getTag();
 
@@ -53,5 +84,22 @@ public class TripsAdapter extends ArrayAdapter<Trip> {
         holder.total_cost.setText(String.valueOf(trip.getTotalCost()));
 
         return convertView;
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private boolean tripImageChange(View convertView, String imageName) {
+        try
+    {
+        InputStream ims = context.getAssets().open(imageName);
+        Drawable d = Drawable.createFromStream(ims, null);
+        ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView2);
+        imageView.setBackground(d);
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+    }catch(IOException ex)
+    {
+        return true;
+    }
+        return false;
     }
 }

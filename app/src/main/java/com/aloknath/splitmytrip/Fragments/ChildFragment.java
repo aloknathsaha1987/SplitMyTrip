@@ -3,10 +3,11 @@ package com.aloknath.splitmytrip.Fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,27 +17,22 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.aloknath.splitmytrip.Activities.TripActivity;
 import com.aloknath.splitmytrip.Objects.Person;
 import com.aloknath.splitmytrip.Objects.TripItem;
 import com.aloknath.splitmytrip.R;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.aloknath.splitmytrip.ImageConversion.DbBitmapUtility.getImage;
 
 /**
  * Created by ALOKNATH on 3/14/2015.
@@ -55,10 +51,18 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
     private AlertDialog.Builder alertDialog;
     private double entered_amount = 0;
     private ImageView imageView;
+    private Button save_item;
+    private Button save_person;
+    private double person_amount_paid;
+    private double item_amount_edited;
+    private EditText editTextPerson;
+    private EditText editTextItem;
 
 
     public interface  onChildEvent {
         public void amountPaid(String tripName, String from, String to, double amount);
+        public void editPerson(Person person, double amount, List<HashMap<String, Object>> result);
+        public void editItem(TripItem item, double amount);
     }
 
     public static ChildFragment newInstance(Bundle args) {
@@ -87,6 +91,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -99,11 +104,25 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
 
             root = inflater.inflate(R.layout.fragment_child_person, container, false);
 
+            InputMethodManager imm = (InputMethodManager)root.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
+            }
+
+            try
+            {
+                InputStream ims = getActivity().getAssets().open("child_item.jpg");
+                Drawable d = Drawable.createFromStream(ims, null);
+                root.setBackground(d);
+
+            }catch(IOException ex)
+            {
+                return null;
+            }
+
+
             personsList = (HashMap<Integer, Person>) getArguments().getSerializable("hashMap");
             result = (List<HashMap<String, Object>>) getArguments().getSerializable("price_split");
-
-            textView = (TextView)root.findViewById(R.id.person_name);
-            textView.setText(personsList.get(position).getName());
 
             textView = (TextView)root.findViewById(R.id.edit_amount_to_get);
             textView.setText("$" + String.valueOf(personsList.get(position).getAmountToGet()));
@@ -116,6 +135,26 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             textView = (TextView)root.findViewById(R.id.edit_amount_paid);
             textView.setText("$" + String.valueOf(personsList.get(position).getAmountPaid()));
 
+            editTextPerson = (EditText)root.findViewById(R.id.edit_amount);
+
+            save_person = (Button)root.findViewById(R.id.button_save_person);
+            final String[] value = new String[1];
+
+            save_person.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    value[0] = editTextPerson.getText().toString();
+                    if(value[0].isEmpty()){
+
+                    }else {
+                        person_amount_paid = Double.parseDouble(value[0]);
+                        if (person_amount_paid != 0) {
+                            childEventListener.editPerson(personsList.get(position), person_amount_paid, result);
+                        }
+                    }
+                }
+            });
+
             imageView = (ImageView)root.findViewById(R.id.imageView2);
             imageView.setImageBitmap(personsList.get(position).getPersonImage());
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
@@ -125,10 +164,23 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
 
             root = inflater.inflate(R.layout.fragment_child_item, container, false);
 
-            tripItemList = (HashMap<Integer, TripItem>) getArguments().getSerializable("hashMap");
+            InputMethodManager imm = (InputMethodManager)root.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(root.getWindowToken(), 0);
+            }
 
-            textView = (TextView)root.findViewById(R.id.item_name);
-            textView.setText(tripItemList.get(position).getItemName());
+            try
+            {
+                InputStream ims = getActivity().getAssets().open("child_item.jpg");
+                Drawable d = Drawable.createFromStream(ims, null);
+                root.setBackground(d);
+
+            }catch(IOException ex)
+            {
+                return null;
+            }
+
+            tripItemList = (HashMap<Integer, TripItem>) getArguments().getSerializable("hashMap");
 
             textView = (TextView)root.findViewById(R.id.edit_trip_name);
             textView.setText(tripItemList.get(position).getTripName());
@@ -139,6 +191,26 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             imageView = (ImageView)root.findViewById(R.id.imageView2);
             imageView.setImageBitmap(setItemImage(tripItemList.get(position).getItemName()));
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            editTextItem = (EditText)root.findViewById(R.id.editText2);
+            final String[] value = new String[1];
+
+            save_item = (Button)root.findViewById(R.id.button_save_item);
+
+            save_item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    value[0] = editTextItem.getText().toString();
+                    if(value[0].isEmpty()){
+
+                    }else {
+                        item_amount_edited = Double.parseDouble(value[0]);
+                        if (item_amount_edited != 0) {
+                            childEventListener.editItem(tripItemList.get(position), item_amount_edited);
+                        }
+                    }
+                }
+            });
 
         }
 
@@ -334,6 +406,8 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                 sender = (Person) mapReturned.get("from");
                 recipient = (Person) mapReturned.get("to");
                 amount = (Double) mapReturned.get("amount");
+                amount = Math.round(amount*100)/100.0d;
+
 
                 if(person.getName().equals(recipient.getName())){
 
@@ -365,6 +439,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                 sender = (Person) mapReturned.get("from");
                 recipient = (Person) mapReturned.get("to");
                 amount = (Double) mapReturned.get("amount");
+                amount = Math.round(amount*100)/100.0d;
 
                 if (person.getName().equals(sender.getName())) {
 
@@ -382,7 +457,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                     give = new Button(getActivity());
                     layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
-                    layoutParams.setMargins(10, 10, 10, 10);
+                    layoutParams.setMargins(50, 10, 10, 10);
                     give.setLayoutParams(layoutParams);
                     give.setText("Give Amount");
                     linearLayout.addView(give);

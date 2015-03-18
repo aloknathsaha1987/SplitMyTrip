@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.aloknath.splitmytrip.Activities.TripActivity;
 import com.aloknath.splitmytrip.CustomViews.RoundedImageView;
@@ -80,6 +81,7 @@ public class ExpandableBaseAdapter extends BaseExpandableListAdapter {
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup viewGroup) {
 
@@ -87,14 +89,40 @@ public class ExpandableBaseAdapter extends BaseExpandableListAdapter {
             LayoutInflater infalInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.trip_itenary, null);
+
+
         }
         textView = (TextView)convertView.findViewById(R.id.trip);
 
         if(groupPosition == 0){
             textView.setText("TRIP ITEMS");
+            try
+            {
+                InputStream ims = context.getAssets().open("trip_items.jpg");
+                Drawable d = Drawable.createFromStream(ims, null);
+                ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView2);
+                imageView.setBackground(d);
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            }catch(IOException ex)
+            {
+                return null;
+            }
 
         }else{
             textView.setText("PERSONS");
+            try
+            {
+                InputStream ims = context.getAssets().open("trip_persons.jpeg");
+                Drawable d = Drawable.createFromStream(ims, null);
+                ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView2);
+                imageView.setBackground(d);
+                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+            }catch(IOException ex)
+            {
+                return null;
+            }
         }
 
         return convertView;

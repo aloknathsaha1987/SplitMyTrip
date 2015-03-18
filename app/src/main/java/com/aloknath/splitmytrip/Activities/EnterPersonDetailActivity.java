@@ -161,11 +161,15 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(personName.isEmpty() || enterCost.getText().toString().isEmpty()){
+                    Toast.makeText(EnterPersonDetailActivity.this,"Enter The Person Name and the Amount Paid !!", Toast.LENGTH_SHORT).show();
+                }else{
+                    saveToDb();
+                    noOfPersons = noOfPersons -1;
+                    Toast.makeText(EnterPersonDetailActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
+                    refreshDisplay();
+                }
 
-                saveToDb();
-                noOfPersons = noOfPersons -1;
-                Toast.makeText(EnterPersonDetailActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
-                refreshDisplay();
             }
         });
 

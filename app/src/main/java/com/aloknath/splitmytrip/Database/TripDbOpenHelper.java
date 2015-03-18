@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class TripDbOpenHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASENAME = "split_my_trip_v_1.7.db";
+    private static final String DATABASENAME = "split_my_trip_v_1.9.db";
     private static final int DATABASE_VERSION = 1;
 
     public static final String TRIPSTABLENAME = "Trips_Table";
@@ -48,7 +48,7 @@ public class TripDbOpenHelper extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS " + ITENARYTABLENAME + "(" +
                     "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     ITERNARYTRIP + " TEXT, " +
-                    ITENARYNAME + " INTEGER, " +
+                    ITENARYNAME + " TEXT, " +
                    //TRIPITEMIMAGE + " BLOB, " +
                     AMOUNT + " BLOB " + ")";
 

@@ -59,6 +59,7 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
     private EditText enterCost;
     private InputStream photoStream;
     private Bitmap bitmap;
+    private boolean personAdded;
 
     Button cancel;
     Button next;
@@ -77,6 +78,13 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
             Drawable d = Drawable.createFromStream(ims, null);
             view.setBackground(d);
 
+            ImageView photo = (ImageView)findViewById(R.id.imageView_person);
+            ims = getAssets().open("person_image.jpg");
+            d = Drawable.createFromStream(ims, null);
+            photo.setBackground(d);
+            photo.setScaleType(ImageView.ScaleType.FIT_XY);
+
+
         }catch(IOException ex)
         {
             return;
@@ -92,9 +100,23 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         tripName = bundle.getString("Trip_title");
         noOfPersons = bundle.getInt("Trip_no_of_persons");
 
-        cancel = (Button)findViewById(R.id.button_cancel);
-        next = (Button)findViewById(R.id.button_next);
+        InputStream ims = null;
+        try {
+            ims = getAssets().open("button_next.png");
+            Drawable d = Drawable.createFromStream(ims, null);
 
+            next = (Button)findViewById(R.id.button_next);
+            next.setBackground(d);
+
+            ims = getAssets().open("button_cancel.png");
+            d = Drawable.createFromStream(ims, null);
+
+            cancel = (Button)findViewById(R.id.button_cancel);
+            cancel.setBackground(d);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         editText = (EditText)findViewById(R.id.enter_person_name);
         personName = editText.getText().toString();
@@ -165,9 +187,14 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
                     Toast.makeText(EnterPersonDetailActivity.this,"Enter The Person Name and the Amount Paid !!", Toast.LENGTH_SHORT).show();
                 }else{
                     saveToDb();
-                    noOfPersons = noOfPersons -1;
-                    Toast.makeText(EnterPersonDetailActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
-                    refreshDisplay();
+                    if(personAdded) {
+                        noOfPersons = noOfPersons - 1;
+                        Toast.makeText(EnterPersonDetailActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
+                        refreshDisplay();
+                    }else{
+                        Toast.makeText(EnterPersonDetailActivity.this, "Person Name Already Entered Before", Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
             }
@@ -351,9 +378,23 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         person.setAmountOwed(amountOwed);
         person.setAmountToGet(amountToGet);
         person.setBalance(amount - amountPerHead);
-        person.setPersonImage(bitmap);
+        if(photoStream != null){
+            person.setPersonImage(bitmap);
+        }else{
+            try {
+                InputStream ims = getAssets().open("person_image.jpg");
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(ims);
+                Bitmap bmp = BitmapFactory.decodeStream(bufferedInputStream);
+                person.setPersonImage(bmp);
 
-        tripDataSource.addPerson(person);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+        personAdded =  tripDataSource.addPerson(person);
         tripDataSource.close();
 
     }

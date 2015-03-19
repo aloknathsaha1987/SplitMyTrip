@@ -76,32 +76,32 @@
     </RelativeLayout>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Save &amp; Enter New Item"
         android:layout_marginTop="15dp"
         android:id="@+id/button_save_enter_new"
         android:layout_below="@+id/Key_board_container"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Cancel"
         android:id="@+id/button_cancel"
         android:layout_marginTop="67dp"
         android:layout_below="@+id/button_save_enter_new"
         android:layout_alignLeft="@+id/edit_trip_item_cost"
-        android:layout_alignStart="@+id/edit_trip_item_cost" />
+        android:layout_alignStart="@+id/edit_trip_item_cost"
+       />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Next"
         android:id="@+id/button_next"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/edit_trip_item_cost"
-        android:layout_toEndOf="@+id/edit_trip_item_cost" />
+        android:layout_alignBottom="@+id/button_cancel"
+        android:layout_marginStart="230dp"
+        android:layout_marginLeft="230dp"
+       />
 
 
 

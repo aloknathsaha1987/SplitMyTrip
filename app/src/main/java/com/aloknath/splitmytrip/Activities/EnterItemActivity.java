@@ -62,9 +62,31 @@ public class EnterItemActivity extends FragmentActivity implements KeyBoardFragm
         intent = getIntent();
         bundle = intent.getExtras();
 
-        cancel = (Button)findViewById(R.id.button_cancel);
-        next = (Button)findViewById(R.id.button_next);
-        save_enter = (Button)findViewById(R.id.button_save_enter_new);
+        InputStream ims = null;
+        try {
+            ims = getAssets().open("button_next.png");
+            Drawable d = Drawable.createFromStream(ims, null);
+
+            next = (Button)findViewById(R.id.button_next);
+            next.setBackground(d);
+
+            ims = getAssets().open("button_cancel.png");
+            d = Drawable.createFromStream(ims, null);
+
+            cancel = (Button)findViewById(R.id.button_cancel);
+            cancel.setBackground(d);
+
+            ims = getAssets().open("button_new_item.png");
+            d = Drawable.createFromStream(ims, null);
+            save_enter = (Button)findViewById(R.id.button_save_enter_new);
+            save_enter.setBackground(d);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +184,7 @@ public class EnterItemActivity extends FragmentActivity implements KeyBoardFragm
         String itemName;
         double itemCost;
         String tripName;
+        double itemAdded;
 
         tripName = bundle.getString("Trip_title");
 
@@ -175,7 +198,7 @@ public class EnterItemActivity extends FragmentActivity implements KeyBoardFragm
 
         tripItem.setItemCost(itemCost);
 
-        tripDataSource.addItenary(tripItem);
+        itemAdded = tripDataSource.addItenary(tripItem);
 
         // Also Save to the Trip Table, the Trip Name, The Trip Cost, No of Persons, Amount per Head
 
@@ -193,11 +216,11 @@ public class EnterItemActivity extends FragmentActivity implements KeyBoardFragm
             Toast.makeText(this, " Trip added " + value, Toast.LENGTH_LONG).show();
 
         }else{
-            trip.setTotalCost(trip.getTotalCost() + itemCost);
-            trip.setAmountPerHead(trip.getTotalCost()/ bundle.getInt("Trip_no_of_persons"));
-            value = tripDataSource.updateTrip(trip);
+                trip.setTotalCost(trip.getTotalCost() + itemAdded);
+                trip.setAmountPerHead(trip.getTotalCost() / bundle.getInt("Trip_no_of_persons"));
+                value = tripDataSource.updateTrip(trip);
+                Toast.makeText(this, " Trip updated " + value + "Trip Name: " + trip.getTripName(), Toast.LENGTH_LONG).show();
 
-            Toast.makeText(this, " Trip updated " + value + "Trip Name: " + trip.getTripName(), Toast.LENGTH_LONG).show();
         }
 
         tripDataSource.close();

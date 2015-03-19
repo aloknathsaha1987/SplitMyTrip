@@ -59,8 +59,25 @@ public class NewTripActivity extends FragmentActivity implements KeyBoardFragmen
             return;
         }
 
-        cancel = (Button)findViewById(R.id.button_cancel);
-        next = (Button)findViewById(R.id.button_next);
+        InputStream ims = null;
+        try {
+            ims = getAssets().open("button_next.png");
+            Drawable d = Drawable.createFromStream(ims, null);
+
+            next = (Button)findViewById(R.id.button_next);
+            next.setBackground(d);
+
+            ims = getAssets().open("button_cancel.png");
+            d = Drawable.createFromStream(ims, null);
+
+            cancel = (Button)findViewById(R.id.button_cancel);
+            cancel.setBackground(d);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         cancel.setOnClickListener(new View.OnClickListener() {
 
             @Override

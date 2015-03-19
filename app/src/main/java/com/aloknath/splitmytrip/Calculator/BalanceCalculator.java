@@ -1,5 +1,7 @@
 package com.aloknath.splitmytrip.Calculator;
 
+import android.util.Log;
+
 import com.aloknath.splitmytrip.Objects.Person;
 import java.util.Collections;
 import java.util.Comparator;
@@ -24,7 +26,7 @@ public class BalanceCalculator implements  java.io.Serializable{
 
         while(iterator.hasNext()){
             Person person = iterator.next();
-           // Log.i("Value of person's Balance ", String.valueOf(person.getBalance()) + " His Name: " + person.getName());
+            Log.i("Value of person's Balance ", String.valueOf(person.getBalance()) + " His Name: " + person.getName());
             if ( Math.abs(person.getBalance()) <= tolerance ){
                 iterator.remove() ;
             }
@@ -60,6 +62,10 @@ public class BalanceCalculator implements  java.io.Serializable{
             // transaction is from lowest balance to highest balance
             Collections.sort(persons) ;
 
+            for (Person person: persons){
+                Log.i("Persons Sorted: ", person.toString());
+            }
+
             Person sender = persons.get(0);
             Person recipient = persons.get(persons.size() - 1) ;
 
@@ -75,9 +81,12 @@ public class BalanceCalculator implements  java.io.Serializable{
             } else {
                  amount = senderShouldSend ;
             }
-
+            Log.i("Sender Details from balance calculator before calc: ", sender.toString());
+            Log.i("Recipient Details from balance calculator before calc: ", recipient.toString());
             sender.setBalance(sender.getBalance() + amount);
             recipient.setBalance(recipient.getBalance() - amount);
+            Log.i("Sender Details from balance calculator: ", sender.toString());
+            Log.i("Recipient Details from balance calculator: ", recipient.toString());
 
             HashMap < String , Object > values = new HashMap <>() ;
 

@@ -117,4 +117,17 @@ public class Person extends Trip implements Comparable<Person>, java.io.Serializ
             personImage = BitmapFactory.decodeByteArray(image, 0, image.length);
         }
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", contactNo='" + contactNo + '\'' +
+                ", amountPaid=" + amountPaid +
+                ", amountOwed=" + amountOwed +
+                ", amountToGet=" + amountToGet +
+                ", email='" + email + '\'' +
+                ", balance=" + balance +
+                '}';
+    }
 }

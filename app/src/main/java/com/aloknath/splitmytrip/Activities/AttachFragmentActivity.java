@@ -1,10 +1,14 @@
 package com.aloknath.splitmytrip.Activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.aloknath.splitmytrip.Database.TripDataSource;
 import com.aloknath.splitmytrip.Fragments.ChildFragment;
@@ -24,6 +28,7 @@ import java.util.List;
 public class AttachFragmentActivity extends FragmentActivity implements ChildFragment.onChildEvent {
 
     private TripDataSource tripDataSource;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +37,8 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
         Bundle extras = getIntent().getExtras();
         setTitle(extras.getString("name"));
         String tag = extras.getString("FragmentTagKey");
+
+        progressDialog = new ProgressDialog(AttachFragmentActivity.this);
 
         tripDataSource = new TripDataSource(this);
         tripDataSource.open();
@@ -80,6 +87,7 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
         // Recalculate the Balance owed by the particular person
         // person.setBalance(amount - amountPerHead );
 
+        tripDataSource.open();
         Person sender = tripDataSource.getPersonDetails(from, tripName);
         Person recipient = tripDataSource.getPersonDetails(to, tripName);
         List<Person> persons = new ArrayList<>();
@@ -117,73 +125,145 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
 
          */
 
+        tripDataSource.open();
         Trip personTrip = tripDataSource.getTrip(person.getTripName());
+        Toast.makeText(this, " TripData Source is Open" + personTrip.getTripName(), Toast.LENGTH_SHORT).show();
 
         double oldAmountPaid = person.getAmountPaid();
         person.setAmountPaid(newAmountPaid);
-        if(newAmountPaid > oldAmountPaid) {
-            person.setBalance((newAmountPaid - oldAmountPaid) - personTrip.getAmountPerHead());
-            if(person.getAmountOwed()>0) {
-                if((person.getAmountOwed() - (newAmountPaid- oldAmountPaid))>0) {
-                    person.setAmountOwed(person.getAmountOwed() - (newAmountPaid- oldAmountPaid));
-                }else{
 
-                    person.setAmountToGet((newAmountPaid- oldAmountPaid) - person.getAmountOwed() );
-                    person.setAmountOwed(0);
-                }
-            }
+        person.setBalance((newAmountPaid) - personTrip.getAmountPerHead());
+        Log.i("Person's New Balance: ", String.valueOf(person.getBalance()));
+        Log.i("Amount per head: ", String.valueOf(personTrip.getAmountPerHead()));
+        if(person.getAmountOwed()>0) {
+            if((person.getAmountOwed() - (newAmountPaid- oldAmountPaid))>0) {
+                person.setAmountOwed(person.getAmountOwed() - (newAmountPaid- oldAmountPaid));
+            }else{
 
-        }else{
-            person.setBalance((oldAmountPaid - newAmountPaid) - personTrip.getAmountPerHead());
-
-            if(person.getAmountOwed()>0) {
-                person.setAmountOwed(person.getAmountOwed() - ( oldAmountPaid - newAmountPaid));
-
-//                if((person.getAmountOwed() - ( oldAmountPaid - newAmountPaid))>0) {
-//                    person.setAmountOwed(person.getAmountOwed() - ( oldAmountPaid - newAmountPaid));
-//                }else{
-//
-//                    person.setAmountToGet((oldAmountPaid - newAmountPaid) - person.getAmountOwed() );
-//                    person.setAmountOwed(0);
-//                }
+                person.setAmountToGet((newAmountPaid- oldAmountPaid) - person.getAmountOwed() );
+                person.setAmountOwed(0);
             }
         }
+
+        Log.i(" The Loop is running: ", person.getName());
+
+//        if(newAmountPaid > oldAmountPaid) {
+//            person.setBalance((newAmountPaid) - personTrip.getAmountPerHead());
+//            if(person.getAmountOwed()>0) {
+//                if((person.getAmountOwed() - (newAmountPaid- oldAmountPaid))>0) {
+//                    person.setAmountOwed(person.getAmountOwed() - (newAmountPaid- oldAmountPaid));
+//                }else{
+//
+//                    person.setAmountToGet((newAmountPaid- oldAmountPaid) - person.getAmountOwed() );
+//                    person.setAmountOwed(0);
+//                }
+//            }
+//
+//        }else{
+//            person.setBalance((newAmountPaid) - personTrip.getAmountPerHead());
+//
+//            if(person.getAmountOwed()>0) {
+//                person.setAmountOwed(person.getAmountOwed() + ( oldAmountPaid - newAmountPaid));
+//
+////                if((person.getAmountOwed() - ( oldAmountPaid - newAmountPaid))>0) {
+////                    person.setAmountOwed(person.getAmountOwed() - ( oldAmountPaid - newAmountPaid));
+////                }else{
+////
+////                    person.setAmountToGet((oldAmountPaid - newAmountPaid) - person.getAmountOwed() );
+////                    person.setAmountOwed(0);
+////                }
+//            }
+//        }
 
         tripDataSource.updatePerson(person);
 
-        Iterator iterator = result.iterator();
-        Person sender;
-        Person recipient;
-        double amount;
+        HashMap<String, Object> personMap = new HashMap<>();
+        personMap.put("person", person);
+        result.add(personMap);
 
-        while (iterator.hasNext()) {
+        Log.i(" The tripDatasource is updated with the person: ", person.getName());
 
-            HashMap<String, Object> mapReturned = (HashMap<String, Object>) iterator.next();
-            sender = (Person) mapReturned.get("from");
-            recipient = (Person) mapReturned.get("to");
+        UpdateDbAsyncTask asyncTask = new UpdateDbAsyncTask();
+        asyncTask.execute(result);
 
-            if(sender.getName().equals(person.getName())){
+    }
 
-                if(sender.getAmountOwed() > (newAmountPaid - sender.getAmountPaid())){
-                    amount = (newAmountPaid - sender.getAmountPaid());
+    private class UpdateDbAsyncTask extends AsyncTask<List<HashMap<String, Object>>, Void, Person>{
 
-                }else{
-                    amount = sender.getAmountOwed();
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog.setMessage("Saving to Db");
+            progressDialog.setIndeterminate(true);
+            progressDialog.show();
+        }
+        @Override
+        protected Person doInBackground(List<HashMap<String, Object>>... lists) {
+
+            Person sender;
+            Person recipient;
+            double amount;
+            HashMap<String, Object> mapReturned = (HashMap<String, Object>) lists[0].get(lists[0].size() - 1);
+            Person person = (Person)mapReturned.get("person");
+            Log.i(" The Results Size: ", String.valueOf(lists[0].size()));
+            lists[0].remove(lists[0].size() - 1);
+            Log.i(" The Results Size after deletion: ", String.valueOf(lists[0].size()));
+            Iterator iterator = lists[0].iterator();
+            Log.i(" The Loop is running inside the Async Task: ", person.getName());
+
+            while (iterator.hasNext()) {
+
+                mapReturned = (HashMap<String, Object>) iterator.next();
+                sender = (Person) mapReturned.get("from");
+                Person temp = tripDataSource.getPersonDetails(sender.getName(), sender.getTripName());
+                sender.setBalance(temp.getBalance());
+                recipient = (Person) mapReturned.get("to");
+                temp = tripDataSource.getPersonDetails(recipient.getName(), recipient.getTripName());
+                recipient.setBalance(temp.getBalance());
+
+                if(sender.getName().equals(person.getName())){
+
+                    Log.i(" Come inside this loop: ", sender.getName());
+                    Log.i("Sender Details: ", sender.toString());
+                    Log.i("Recipient Details: ", recipient.toString());
+
+                    if(sender.getAmountOwed() > (person.getAmountPaid() - sender.getAmountPaid())){
+                        amount = (person.getAmountPaid() - sender.getAmountPaid());
+
+                    }else{
+                        amount = sender.getAmountOwed();
+                    }
+                    amount = Math.round(amount * 100) / 100.0d;
+                    // just have to update the recipient
+                    Log.i("The Amount generated", String.valueOf(amount));
+                    Log.i("The Recipient Balance before modification: ", String.valueOf(recipient.getBalance()) + ":" + String.valueOf(amount));
+                    recipient.setAmountToGet(Math.round((recipient.getAmountToGet() - amount)*100)/100.0d);
+                    recipient.setBalance(Math.round((recipient.getBalance() - amount)*100)/100.0d);
+                    Log.i("The recipient's Name and Balance", recipient.getName() + " :"+ String.valueOf(recipient.getBalance()));
+                    recipient.setAmountPaid(Math.round((recipient.getAmountPaid() - amount)*100)/100.0d);
+
+                    // Update the recipient in the Database
+//                    tripDataSource.open();
+                    tripDataSource.updatePerson(recipient);
+                    Log.i(" Updation of the Db Done ", recipient.getName());
+
                 }
-                amount = Math.round(amount * 100) / 100.0d;
-                // just have to update the recipient
-                recipient.setAmountToGet(Math.round((recipient.getAmountToGet() - amount)*100)/100.0d);
-                recipient.setBalance(Math.round((recipient.getBalance() - amount)*100)/100.0d);
-                recipient.setAmountPaid(Math.round((recipient.getAmountPaid() - amount)*100)/100.0d);
-
-                // Update the recipient in the Database
-                tripDataSource.updatePerson(recipient);
-
+                Log.i(" Stuck In the Iterator Loop","");
             }
+
+            Log.i(" Coming out of the Iterator Loop ","");
+
+            return person;
         }
 
-        refreshDisplay(person.getTripName());
-        tripDataSource.close();
+        @Override
+        protected void onPostExecute(Person person) {
+            super.onPostExecute(person);
+            progressDialog.hide();
+            tripDataSource.close();
+            refreshDisplay(person.getTripName());
+
+        }
     }
 
     @Override

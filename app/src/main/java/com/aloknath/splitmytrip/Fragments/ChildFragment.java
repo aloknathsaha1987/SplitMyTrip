@@ -135,25 +135,25 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             textView = (TextView)root.findViewById(R.id.edit_amount_paid);
             textView.setText("$" + String.valueOf(personsList.get(position).getAmountPaid()));
 
-            editTextPerson = (EditText)root.findViewById(R.id.edit_amount);
+//            editTextPerson = (EditText)root.findViewById(R.id.edit_amount);
 
-            save_person = (Button)root.findViewById(R.id.button_save_person);
-            final String[] value = new String[1];
-
-            save_person.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    value[0] = editTextPerson.getText().toString();
-                    if(value[0].isEmpty()){
-
-                    }else {
-                        person_amount_paid = Double.parseDouble(value[0]);
-                        if (person_amount_paid != 0) {
-                            childEventListener.editPerson(personsList.get(position), person_amount_paid, result);
-                        }
-                    }
-                }
-            });
+//            save_person = (Button)root.findViewById(R.id.button_save_person);
+//            final String[] value = new String[1];
+//
+//            save_person.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    value[0] = editTextPerson.getText().toString();
+//                    if(value[0].isEmpty()){
+//
+//                    }else {
+//                        person_amount_paid = Double.parseDouble(value[0]);
+//                        if (person_amount_paid != 0) {
+//                            childEventListener.editPerson(personsList.get(position), person_amount_paid, result);
+//                        }
+//                    }
+//                }
+//            });
 
             imageView = (ImageView)root.findViewById(R.id.imageView2);
             imageView.setImageBitmap(personsList.get(position).getPersonImage());
@@ -192,25 +192,25 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             imageView.setImageBitmap(setItemImage(tripItemList.get(position).getItemName()));
             imageView.setScaleType(ImageView.ScaleType.FIT_XY);
 
-            editTextItem = (EditText)root.findViewById(R.id.editText2);
-            final String[] value = new String[1];
-
-            save_item = (Button)root.findViewById(R.id.button_save_item);
-
-            save_item.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    value[0] = editTextItem.getText().toString();
-                    if(value[0].isEmpty()){
-
-                    }else {
-                        item_amount_edited = Double.parseDouble(value[0]);
-                        if (item_amount_edited != 0) {
-                            childEventListener.editItem(tripItemList.get(position), item_amount_edited);
-                        }
-                    }
-                }
-            });
+//            editTextItem = (EditText)root.findViewById(R.id.editText2);
+//            final String[] value = new String[1];
+//
+//            save_item = (Button)root.findViewById(R.id.button_save_item);
+//
+//            save_item.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    value[0] = editTextItem.getText().toString();
+//                    if(value[0].isEmpty()){
+//
+//                    }else {
+//                        item_amount_edited = Double.parseDouble(value[0]);
+//                        if (item_amount_edited != 0) {
+//                            childEventListener.editItem(tripItemList.get(position), item_amount_edited);
+//                        }
+//                    }
+//                }
+//            });
 
         }
 
@@ -378,6 +378,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
     }
 
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void Split(View root, int position) {
         LinearLayout linearLayout = (LinearLayout)root.findViewById(R.id.linearlayout);
 
@@ -407,6 +408,9 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                 recipient = (Person) mapReturned.get("to");
                 amount = (Double) mapReturned.get("amount");
                 amount = Math.round(amount*100)/100.0d;
+
+                Log.i("Sender Details from child fragment: ", sender.toString());
+                Log.i("Recipient Details from child fragment: ", recipient.toString());
 
 
                 if(person.getName().equals(recipient.getName())){
@@ -459,7 +463,16 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                             LinearLayout.LayoutParams.WRAP_CONTENT);
                     layoutParams.setMargins(50, 10, 10, 10);
                     give.setLayoutParams(layoutParams);
-                    give.setText("Give Amount");
+
+                    InputStream ims = null;
+                    try {
+                        ims = getActivity().getAssets().open("button_give_amount.png");
+                        Drawable d = Drawable.createFromStream(ims, null);
+                        give.setBackground(d);
+                    }catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                     linearLayout.addView(give);
                     final Person send = sender;
                     final Person receive = recipient;

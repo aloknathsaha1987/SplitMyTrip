@@ -162,25 +162,27 @@
     </RelativeLayout>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Cancel"
         android:id="@+id/button_cancel"
         android:layout_marginTop="0dp"
         android:layout_below="@+id/Key_board_container"
-        android:layout_toLeftOf="@+id/enter_person_amount_paid"
-        android:layout_toStartOf="@+id/enter_person_amount_paid" />
+        android:layout_alignStart="@+id/imageView2"
+        android:layout_alignLeft="@+id/imageView2"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+       />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Next"
         android:id="@+id/button_next"
         android:layout_alignTop="@+id/button_cancel"
         android:layout_alignRight="@+id/enter_person_amount_paid"
         android:layout_alignEnd="@+id/enter_person_amount_paid"
-        android:layout_marginRight="53dp"
-        android:layout_marginEnd="53dp" />
+        android:layout_marginRight="43dp"
+        android:layout_marginEnd="43dp"
+       />
 
 </RelativeLayout>
 

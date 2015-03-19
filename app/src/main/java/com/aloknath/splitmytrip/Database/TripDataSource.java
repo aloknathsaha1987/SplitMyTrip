@@ -44,7 +44,8 @@ public class TripDataSource {
                     TripDbOpenHelper.AMOUNTOWED,
                     TripDbOpenHelper.AMOUNTTOGET,
                     TripDbOpenHelper.BALANCE,
-                    TripDbOpenHelper.PERSONIMAGE};
+                    TripDbOpenHelper.PERSONIMAGE,
+                    TripDbOpenHelper.PERSONEMAIL};
 
 
     public TripDataSource(Context context){
@@ -74,36 +75,81 @@ public class TripDataSource {
         return (insertId != -1);
     }
 
-    public boolean addItenary(TripItem tripItem){
+    public double addItenary(TripItem tripItem){
 
         sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
+        int flag = 0;
+        double amount = 0;
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TripDbOpenHelper.ITERNARYTRIP, tripItem.getTripName());
-        contentValues.put(TripDbOpenHelper.ITENARYNAME, tripItem.getItemName());
-        contentValues.put(TripDbOpenHelper.AMOUNT, tripItem.getItemCost());
-        //contentValues.put(TripDbOpenHelper.TRIPITEMIMAGE, getBytes(tripItem.getTripItemImage()));
+        // Get the Items from the Database
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TripDbOpenHelper.ITENARYTABLENAME + " WHERE itenary_trip like '%" + tripItem.getTripName() + "%'", null);
+        if (cursor.getCount()> 0) {
+            while (cursor.moveToNext()) {
+                String itemName = cursor.getString(cursor.getColumnIndex(TripDbOpenHelper.ITENARYNAME));
+                double oldcost = cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNT));
+                if (itemName.equalsIgnoreCase(tripItem.getItemName())){
+                    amount = tripItem.getItemCost() - oldcost;
+                    flag = 1;
+                    break;
+                }
+            }
+        }
 
-        long insertId = sqLiteDatabase.insert(TripDbOpenHelper.ITENARYTABLENAME, null, contentValues);
-        return (insertId != -1);
+        if (flag == 0){
+
+            amount = tripItem.getItemCost();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(TripDbOpenHelper.ITERNARYTRIP, tripItem.getTripName());
+            contentValues.put(TripDbOpenHelper.ITENARYNAME, tripItem.getItemName());
+            contentValues.put(TripDbOpenHelper.AMOUNT, tripItem.getItemCost());
+            //contentValues.put(TripDbOpenHelper.TRIPITEMIMAGE, getBytes(tripItem.getTripItemImage()));
+             sqLiteDatabase.insert(TripDbOpenHelper.ITENARYTABLENAME, null, contentValues);
+            return amount;
+        }else{
+            //update the data base
+            updateTripItem(tripItem);
+            return amount;
+        }
     }
 
     public boolean addPerson(Person person){
 
         sqLiteDatabase = sqLiteOpenHelper.getWritableDatabase();
 
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TripDbOpenHelper.PERSONNAME, person.getName());
-        contentValues.put(TripDbOpenHelper.PERSONCONTACT, person.getContactNo());
-        contentValues.put(TripDbOpenHelper.PERSONTRIP, person.getTripName());
-        contentValues.put(TripDbOpenHelper.AMOUNTPAID, person.getAmountPaid());
-        contentValues.put(TripDbOpenHelper.AMOUNTOWED, person.getAmountOwed());
-        contentValues.put(TripDbOpenHelper.AMOUNTTOGET, person.getAmountToGet());
-        contentValues.put(TripDbOpenHelper.BALANCE, person.getBalance());
-        contentValues.put(TripDbOpenHelper.PERSONIMAGE, getBytes( person.getPersonImage()));
+        int flag = 0;
 
-        long insertId = sqLiteDatabase.insert(TripDbOpenHelper.PERSONTABLENAME, null, contentValues);
-        return (insertId != -1);
+        // Get the Items from the Database
+        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + TripDbOpenHelper.PERSONTABLENAME + " WHERE person_trip like '%" + person.getTripName() + "%'", null);
+        if (cursor.getCount()> 0) {
+            while (cursor.moveToNext()) {
+                String personName = cursor.getString(cursor.getColumnIndex(TripDbOpenHelper.PERSONNAME));
+                if (personName.equalsIgnoreCase(person.getName())){
+                    flag = 1;
+                    break;
+                }
+            }
+        }
+
+        if (flag == 0){
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(TripDbOpenHelper.PERSONNAME, person.getName());
+            contentValues.put(TripDbOpenHelper.PERSONCONTACT, person.getContactNo());
+            contentValues.put(TripDbOpenHelper.PERSONEMAIL, person.getEmail());
+            contentValues.put(TripDbOpenHelper.PERSONTRIP, person.getTripName());
+            contentValues.put(TripDbOpenHelper.AMOUNTPAID, person.getAmountPaid());
+            contentValues.put(TripDbOpenHelper.AMOUNTOWED, person.getAmountOwed());
+            contentValues.put(TripDbOpenHelper.AMOUNTTOGET, person.getAmountToGet());
+            contentValues.put(TripDbOpenHelper.BALANCE, person.getBalance());
+            contentValues.put(TripDbOpenHelper.PERSONIMAGE, getBytes( person.getPersonImage()));
+
+            sqLiteDatabase.insert(TripDbOpenHelper.PERSONTABLENAME, null, contentValues);
+
+            return true;
+
+        }else{
+            return false;
+        }
     }
 
     public List<Trip> getTrips(){
@@ -160,6 +206,7 @@ public class TripDataSource {
                 person.setAmountOwed(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTOWED)));
                 person.setBalance(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.BALANCE)));
                 person.setPersonImage(getImage(cursor.getBlob(cursor.getColumnIndex(TripDbOpenHelper.PERSONIMAGE))));
+                person.setEmail(cursor.getString(cursor.getColumnIndex(TripDbOpenHelper.PERSONEMAIL)));
                 persons.add(person);
             }
         }
@@ -208,6 +255,7 @@ public class TripDataSource {
             while (cursor.moveToNext()) {
 
                 person.setContactNo(cursor.getString(cursor.getColumnIndex(TripDbOpenHelper.PERSONCONTACT)));
+                person.setEmail(cursor.getString(cursor.getColumnIndex(TripDbOpenHelper.PERSONEMAIL)));
                 person.setAmountPaid(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTPAID)));
                 person.setAmountOwed(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTOWED)));
                 person.setAmountToGet(cursor.getDouble(cursor.getColumnIndex(TripDbOpenHelper.AMOUNTTOGET)));

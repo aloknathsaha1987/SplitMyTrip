@@ -100,48 +100,13 @@
             android:layout_marginTop="22dp"
             />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="EDIT AMOUNT PAID "
-            android:textSize="20sp"
-            android:textColor="#000000"
-            android:id="@+id/edit_amount_paid_to"
-            android:layout_below="@+id/amount_owed"
-            android:layout_alignLeft="@+id/amount_owed"
-            android:layout_alignStart="@+id/amount_owed"
-            android:layout_marginTop="15dp"/>
 
-        <EditText
-            android:layout_width="100dp"
-            android:layout_height="35dp"
-            android:background="#ff0af4d9"
-            android:hint="Amount"
-            android:id="@+id/edit_amount"
-            android:inputType="phone"
-            android:digits="1234567890"
-            android:layout_below="@+id/edit_amount_paid_to"
-            android:layout_alignLeft="@+id/edit_amount_paid_to"
-            android:layout_alignStart="@+id/edit_amount_paid_to"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginLeft="5dp"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:id="@+id/button_save_person"
-            android:layout_below="@+id/edit_amount_paid_to"
-            android:layout_alignRight="@+id/edit_amount_to_get"
-            android:layout_alignEnd="@+id/edit_amount_to_get"
-            android:layout_marginTop="3dp"/>
  <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/scroll_view"
-        android:layout_below="@+id/button_save_person"
+        android:layout_below="@+id/edit_amount_owed"
         android:layout_marginTop="10dp">
 
         <LinearLayout

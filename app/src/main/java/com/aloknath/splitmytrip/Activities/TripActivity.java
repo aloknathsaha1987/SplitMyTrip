@@ -97,17 +97,17 @@ public class TripActivity extends Activity {
         InputStream inputStream = null;
         Bitmap imageReturned = null;
 
-        if(imageName.equals("Travel") || imageName.equals("travel")||imageName.equals("TRAVEL")){
+        if(imageName.equalsIgnoreCase("travel")){
 
             try {
-                inputStream = getAssets().open("travel.png");
+                inputStream = getAssets().open("travel.jpg");
             } catch (IOException e) {
                 e.printStackTrace();
             }
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Adventure") || imageName.equals("adventure")||imageName.equals("ADVENTURE")){
+        }else if(imageName.equalsIgnoreCase("adventure")){
 
             try {
                 inputStream = getAssets().open("adventure.jpg");
@@ -117,7 +117,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Hiking") || imageName.equals("hiking")||imageName.equals("HIKING")||imageName.equals("Trekking")||imageName.equals("trekking")||imageName.equals("TREKKING")){
+        }else if(imageName.equalsIgnoreCase("hiking")||imageName.equalsIgnoreCase("trekking")){
 
             try {
                 inputStream = getAssets().open("hiking.jpg");
@@ -127,7 +127,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Food") || imageName.equals("food")||imageName.equals("FOOD")){
+        }else if(imageName.equalsIgnoreCase("food")){
 
             try {
                 inputStream = getAssets().open("food.jpg");
@@ -137,7 +137,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Water") || imageName.equals("water")||imageName.equals("WATER")){
+        }else if(imageName.equalsIgnoreCase("water")){
 
             try {
                 inputStream = getAssets().open("water.jpg");
@@ -147,7 +147,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Hotel") || imageName.equals("hotel")||imageName.equals("HOTEL")){
+        }else if(imageName.equalsIgnoreCase("hotel")||imageName.equalsIgnoreCase("motel")){
 
             try {
                 inputStream = getAssets().open("hotel.jpg");
@@ -158,7 +158,7 @@ public class TripActivity extends Activity {
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
 
-        }else if(imageName.equals("Bar") || imageName.equals("bar")||imageName.equals("BAR")||imageName.equals("Drinks")||imageName.equals("drinks")||imageName.equals("DRINKS")||imageName.equals("Disco")||imageName.equals("disco")||imageName.equals("disco")||imageName.equals("Pub")||imageName.equals("pub")||imageName.equals("PUB")||imageName.equals("Drink")||imageName.equals("drink")||imageName.equals("DRINK")){
+        }else if(imageName.equalsIgnoreCase("bar")||imageName.equalsIgnoreCase("drinks")||imageName.equalsIgnoreCase("disco")||imageName.equalsIgnoreCase("pub")||imageName.equalsIgnoreCase("drink")){
 
             try {
                 inputStream = getAssets().open("bar.jpg");
@@ -168,7 +168,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Fuel") || imageName.equals("fuel")||imageName.equals("FUEL")||imageName.equals("Car")||imageName.equals("car")||imageName.equals("CAR")||imageName.equals("Gas")||imageName.equals("gas")||imageName.equals("GAS")){
+        }else if(imageName.equalsIgnoreCase("fuel")||imageName.equalsIgnoreCase("car")||imageName.equalsIgnoreCase("gas")){
 
             try {
                 inputStream = getAssets().open("fuel.jpg");
@@ -178,7 +178,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Museum") || imageName.equals("museum")||imageName.equals("Museum")||imageName.equals("Gallery")||imageName.equals("gallery")||imageName.equals("gallery")){
+        }else if(imageName.equalsIgnoreCase("museum")||imageName.equalsIgnoreCase("gallery")){
 
             try {
                 inputStream = getAssets().open("museum.jpg");
@@ -188,7 +188,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Aquarium") || imageName.equals("aquarium")||imageName.equals("AQUARIUM")){
+        }else if(imageName.equalsIgnoreCase("aquarium")){
 
             try {
                 inputStream = getAssets().open("aquarium.jpg");
@@ -198,7 +198,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Park") || imageName.equals("park")||imageName.equals("PARK")){
+        }else if(imageName.equalsIgnoreCase("park")){
 
             try {
                 inputStream = getAssets().open("park.jpg");
@@ -208,7 +208,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Train") || imageName.equals("train")||imageName.equals("TRAIN")){
+        }else if(imageName.equalsIgnoreCase("train")){
 
             try {
                 inputStream = getAssets().open("train.jpg");
@@ -218,7 +218,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Bus") || imageName.equals("bus")||imageName.equals("BUS")){
+        }else if(imageName.equalsIgnoreCase("bus")){
 
             try {
                 inputStream = getAssets().open("bus.jpg");
@@ -228,7 +228,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Shopping") || imageName.equals("shopping")||imageName.equals("SHOPPING")){
+        }else if(imageName.equalsIgnoreCase("shopping")){
 
             try {
                 inputStream = getAssets().open("shopping.jpg");
@@ -238,7 +238,7 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equals("Beach") || imageName.equals("beach")||imageName.equals("BEACH")){
+        }else if(imageName.equalsIgnoreCase("beach")){
 
             try {
                 inputStream = getAssets().open("beach.jpg");

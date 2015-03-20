@@ -1,7 +1,9 @@
 package com.aloknath.splitmytrip.Activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ContextMenu;
@@ -29,11 +31,13 @@ public class ExistingTripActivity extends ListActivity {
     private TripDataSource tripDataSource;
     private int currentNoteId;
     public static final int MENU_DELETE_ID = 1001;
+    private AlertDialog.Builder alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.existing_trips_layout);
+        alertDialog = new AlertDialog.Builder(this);
 
         // For Context Menu
         registerForContextMenu(getListView());
@@ -70,11 +74,29 @@ public class ExistingTripActivity extends ListActivity {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getItemId() == MENU_DELETE_ID) {
-            Trip trip = tripList.get(currentNoteId);
-            tripDataSource.open();
-            tripDataSource.removeTrip(trip);
-            refreshDisplay();
-            tripDataSource.close();
+
+            // Set Up an Alert Dialog Box with OK and a Cancel Button
+            alertDialog.setTitle(" Confirm Deletion !!");
+            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    Trip trip = tripList.get(currentNoteId);
+                    tripDataSource.open();
+                    tripDataSource.removeTrip(trip);
+                    tripDataSource.close();
+                    tripList.clear();
+                    refreshDisplay();
+                }
+            });
+            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    refreshDisplay();
+                }
+            });
+            alertDialog.show();
+
         }
         return true;
     }

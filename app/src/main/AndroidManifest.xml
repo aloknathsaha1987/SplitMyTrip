@@ -25,14 +25,15 @@
             android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".Activities.NewTripActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize"/>
-        <activity android:name=".Activities.ExistingTripActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize"/>
-        <activity android:name=".Activities.SendAmountActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize"/>
-        <activity android:name=".Activities.GoogleMapsActivity"  android:screenOrientation="portrait" android:configChanges="orientation|screenSize"/>
-        <activity android:name=".Activities.EnterItemActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize"/>
-        <activity android:name=".Activities.EnterPersonDetailActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize"/>
-        <activity android:name=".Activities.TripActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize"/>
-        <activity android:name=".Activities.AttachFragmentActivity" android:screenOrientation="portrait" android:configChanges="orientation|screenSize"/>
+        <activity android:name=".Activities.NewTripActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.ExistingTripActivity" android:screenOrientation="portrait" />
+        <activity android:name=".Activities.SendAmountActivity" android:screenOrientation="portrait" />
+        <activity android:name=".Activities.GoogleMapsActivity"  android:screenOrientation="portrait" />
+        <activity android:name=".Activities.EnterItemActivity" android:screenOrientation="portrait" />
+        <activity android:name=".Activities.EnterPersonDetailActivity" android:screenOrientation="portrait" />
+        <activity android:name=".Activities.TripActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.AttachFragmentActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.TripAmountOwedActivity" android:screenOrientation="portrait"/>
 
     </application>
 

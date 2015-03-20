@@ -157,8 +157,8 @@ public class KeyBoardFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-
-                if(sb.length()>0)
+//
+//                if(sb.length()>0)
                     add("0");
             }
         });

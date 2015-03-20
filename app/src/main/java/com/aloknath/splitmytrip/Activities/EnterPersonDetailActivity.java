@@ -1,10 +1,12 @@
 package com.aloknath.splitmytrip.Activities;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
@@ -60,6 +62,8 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
     private InputStream photoStream;
     private Bitmap bitmap;
     private boolean personAdded;
+    private double totalCost;
+    private AlertDialog.Builder alertDialog;
 
     Button cancel;
     Button next;
@@ -70,6 +74,7 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.enter_person);
+        alertDialog = new AlertDialog.Builder(this);
 
         try
         {
@@ -99,6 +104,9 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         bundle = intent.getExtras();
         tripName = bundle.getString("Trip_title");
         noOfPersons = bundle.getInt("Trip_no_of_persons");
+
+        final Trip trip = tripDataSource.getTrip(tripName);
+        totalCost = trip.getTotalCost();
 
         InputStream ims = null;
         try {
@@ -186,14 +194,62 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
                 if(personName.isEmpty() || enterCost.getText().toString().isEmpty()){
                     Toast.makeText(EnterPersonDetailActivity.this,"Enter The Person Name and the Amount Paid !!", Toast.LENGTH_SHORT).show();
                 }else{
-                    saveToDb();
-                    if(personAdded) {
-                        noOfPersons = noOfPersons - 1;
-                        Toast.makeText(EnterPersonDetailActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
-                        refreshDisplay();
-                    }else{
-                        Toast.makeText(EnterPersonDetailActivity.this, "Person Name Already Entered Before", Toast.LENGTH_SHORT).show();
-                    }
+
+                        // Check to see if the entered Amount is less than the total trip cost, Also check if the
+                        //entered amount + other person's cost is less than or equal to the total trip cost.
+
+                        // 1. Get the Cost entered by the person : enterCost
+                        // 2. Get the total trip oost from the database.
+                        // 3. Compare them
+                        if(Double.parseDouble(enterCost.getText().toString()) > totalCost){
+                            //Display a Dialog Box Stating the cost entered is greater than the total cost
+                            alertDialog.setTitle("Amount Exceeded !!");
+                            alertDialog.setMessage(" Trip Cost : " + totalCost + "\n Entered Amount " + enterCost.getText().toString());
+                            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    enterCost.setText("");
+                                }
+                            });
+                            alertDialog.show();
+                        }else{
+                            // Get the persons so far in the trip from the Databsse
+                            // Sum up their costs
+                            List<Person> personsList = tripDataSource.getPersonsInTrip(tripName);
+                            double costPaidByAll = 0;
+                            for (Person person : personsList){
+                                costPaidByAll += person.getAmountPaid();
+                            }
+                            costPaidByAll += Double.parseDouble(enterCost.getText().toString());
+
+                            if(costPaidByAll > totalCost){
+                                // Display Dialog Box Stating cost entered is greater than total trip cost
+                                alertDialog.setTitle("Amount Exceeded !!");
+                                alertDialog.setMessage(" Trip Cost : " + totalCost + "\n Entered Amount " + enterCost.getText().toString()
+                                                        + " \n Amount Entered by All: " + costPaidByAll);
+                                alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        enterCost.setText("");
+                                    }
+                                });
+                                alertDialog.show();
+
+                            }else{
+                                saveToDb();
+
+                                if(personAdded) {
+
+                                    noOfPersons = noOfPersons - 1;
+                                    Toast.makeText(EnterPersonDetailActivity.this, "Item Saved", Toast.LENGTH_SHORT).show();
+                                    refreshDisplay();
+                                }else{
+                                    Toast.makeText(EnterPersonDetailActivity.this, "Person Name Already Entered Before", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+
 
                 }
 
@@ -286,10 +342,14 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
         }else{
             editText = (EditText)findViewById(R.id.enter_person_number);
             editText.setFocusable(true);
+            editText.setText("");
         }
         if(email != null){
             editText = (EditText)findViewById(R.id.enter_person_email);
             editText.setText(email);
+        }else{
+            editText = (EditText)findViewById(R.id.enter_person_email);
+            editText.setText("");
         }
         if(photoStream != null){
             ImageView photo = (ImageView)findViewById(R.id.imageView_person);
@@ -392,7 +452,6 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
             }
 
         }
-
 
         personAdded =  tripDataSource.addPerson(person);
         tripDataSource.close();

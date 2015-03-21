@@ -34,7 +34,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$250"
+            android:text="250"
             android:textSize="25sp"
             android:textColor="#000000"
             android:id="@+id/edit_amount_paid"
@@ -62,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$150"
+            android:text="150"
             android:textSize="25sp"
             android:textColor="#000000"
             android:id="@+id/edit_amount_to_get"
@@ -88,7 +88,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="$15"
+            android:text="15"
             android:textSize="25sp"
             android:textColor="#000000"
             android:id="@+id/edit_amount_owed"

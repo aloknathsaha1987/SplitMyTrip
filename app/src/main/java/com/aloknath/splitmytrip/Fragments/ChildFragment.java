@@ -125,15 +125,15 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             result = (List<HashMap<String, Object>>) getArguments().getSerializable("price_split");
 
             textView = (TextView)root.findViewById(R.id.edit_amount_to_get);
-            textView.setText("$" + String.valueOf(personsList.get(position).getAmountToGet()));
+            textView.setText("" + String.valueOf(personsList.get(position).getAmountToGet()));
             amountToGet = personsList.get(position).getAmountToGet();
 
             textView = (TextView)root.findViewById(R.id.edit_amount_owed);
-            textView.setText("$" + String.valueOf(personsList.get(position).getAmountOwed()));
+            textView.setText("" + String.valueOf(personsList.get(position).getAmountOwed()));
             amountOwed = personsList.get(position).getAmountOwed();
 
             textView = (TextView)root.findViewById(R.id.edit_amount_paid);
-            textView.setText("$" + String.valueOf(personsList.get(position).getAmountPaid()));
+            textView.setText("" + String.valueOf(personsList.get(position).getAmountPaid()));
 
 //            editTextPerson = (EditText)root.findViewById(R.id.edit_amount);
 
@@ -398,7 +398,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
 
             //Iterate through the results list returned and find if the recipient name matches,
             // If if does, then display the below String
-            // Person Recipient get $money from Person Sender
+            // Person Recipient get money from Person Sender
 
             Iterator iterator = result.iterator();
 
@@ -422,7 +422,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                     layoutParams.gravity = Gravity.TOP;
                     layoutParams.setMargins(10, 10, 10, 10); // (left, top, right, bottom)
                     textView2.setLayoutParams(layoutParams);
-                    textView2.setText(recipient.getName() + " has to get $" + String.valueOf(amount) + " from " + sender.getName());
+                    textView2.setText(recipient.getName() + " has to get " + String.valueOf(amount) + " from " + sender.getName());
                     textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     textView2.setTextColor(Color.BLACK);
                     linearLayout.addView(textView2);
@@ -435,7 +435,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             //get the person from the list
             person = personsList.get(position);
 
-            // Person X has to pay $money to Person Y
+            // Person X has to pay money to Person Y
             Iterator iterator = result.iterator();
 
             while (iterator.hasNext()) {
@@ -454,7 +454,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
                     layoutParams.gravity = Gravity.CENTER;
                     layoutParams.setMargins(10, 10, 10, 10); // (left, top, right, bottom)
                     textView2.setLayoutParams(layoutParams);
-                    textView2.setText(sender.getName() + " has to give $" + String.valueOf(amount) + " to " + recipient.getName());
+                    textView2.setText(sender.getName() + " has to give " + String.valueOf(amount) + " to " + recipient.getName());
                     textView2.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
                     textView2.setTextColor(Color.BLACK);
                     linearLayout.addView(textView2);

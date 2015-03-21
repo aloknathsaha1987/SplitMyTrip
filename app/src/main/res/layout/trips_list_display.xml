@@ -95,7 +95,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="$ 250"
+        android:text=" 250"
         android:id="@+id/edit_total_cost"
         android:layout_toEndOf="@+id/total_cost"
         android:layout_toRightOf="@+id/total_cost"

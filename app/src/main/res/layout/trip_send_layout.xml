@@ -53,9 +53,8 @@
 
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Send SMS"
         android:id="@+id/button_sms"
         android:layout_below="@+id/listView_persons"
         android:layout_alignParentLeft="true"
@@ -65,9 +64,8 @@
         android:layout_marginLeft="20dp"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Send Email"
         android:id="@+id/button_email"
         android:layout_below="@+id/listView_persons"
         android:layout_toRightOf="@+id/button_sms"

@@ -206,9 +206,9 @@ public class ExpandableBaseAdapter extends BaseExpandableListAdapter {
             }
 
             holderPerson.personName.setText(person.getName());
-            holderPerson.amount_paid.setText("$" + String.valueOf(person.getAmountPaid()));
-            holderPerson.amount_owed.setText("$" + String.valueOf(person.getAmountOwed()));
-            holderPerson.amount_to_get.setText("$" + String.valueOf(person.getAmountToGet()));
+            holderPerson.amount_paid.setText("" + String.valueOf(person.getAmountPaid()));
+            holderPerson.amount_owed.setText("" + String.valueOf(person.getAmountOwed()));
+            holderPerson.amount_to_get.setText("" + String.valueOf(person.getAmountToGet()));
         }
 
         return convertView;

@@ -57,7 +57,6 @@ public class TripActivity extends Activity {
             result = calculate(persons, 0);
 
             if(result.size() > 0) {
-                HashMap<String, Object> mapReturned0 = result.get(0);
                 Person sender;
                 Person recipient;
                 double amount;

@@ -4,8 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 import com.aloknath.splitmytrip.Adapters.ExpandableBaseAdapter;
@@ -27,7 +33,7 @@ import static com.aloknath.splitmytrip.Calculator.BalanceCalculator.calculate;
 /**
  * Created by ALOKNATH on 3/11/2015.
  */
-public class TripActivity extends Activity {
+public class TripActivity extends ActionBarActivity {
 
     private ExpandableListView expListView;
     private List<TripItem> tripItems;
@@ -37,6 +43,7 @@ public class TripActivity extends Activity {
     private ExpandableBaseAdapter listAdapter;
     private List<HashMap<String, Object>> result;
     private HashMap<Integer, Bitmap> itemImages = new HashMap<>();
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +57,14 @@ public class TripActivity extends Activity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         tripItemsPersons = getTripItems((String)bundle.get("tripName"));
+
+        // Set The ToolBar
+        toolbar = (Toolbar)findViewById(R.id.include);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#8C000000")));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle((String)bundle.get("tripName") + " Trip");
+
 
         if(persons.size() > 0) {
 
@@ -136,7 +151,18 @@ public class TripActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equalsIgnoreCase("water")){
+        }else if(imageName.equalsIgnoreCase("flight")||imageName.equalsIgnoreCase("plane")||imageName.equalsIgnoreCase("airplane")||imageName.equalsIgnoreCase("aeroplane")){
+
+            try {
+                inputStream = getAssets().open("flight.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }
+        else if(imageName.equalsIgnoreCase("water")){
 
             try {
                 inputStream = getAssets().open("water.jpg");
@@ -306,6 +332,21 @@ public class TripActivity extends Activity {
                 return true;
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.global, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+        }
+        return false;
     }
 
 

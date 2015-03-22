@@ -1,6 +1,5 @@
 package com.aloknath.splitmytrip.Activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
@@ -11,9 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.aloknath.splitmytrip.Adapters.TripsAdapter;
 import com.aloknath.splitmytrip.Database.TripDataSource;
 import com.aloknath.splitmytrip.Objects.Trip;
@@ -47,8 +43,6 @@ public class ExistingTripActivity extends ListActivity {
         tripDataSource.open();
         refreshDisplay();
         tripDataSource.close();
-
-
     }
 
     public void refreshDisplay(){

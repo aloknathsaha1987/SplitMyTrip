@@ -6,10 +6,16 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -35,7 +41,7 @@ import static com.aloknath.splitmytrip.Calculator.BalanceCalculator.calculate;
 /**
  * Created by ALOKNATH on 3/20/2015.
  */
-public class TripAmountOwedActivity extends Activity {
+public class TripAmountOwedActivity extends ActionBarActivity {
 
     private String tripName;
     private TripDataSource tripDataSource;
@@ -49,6 +55,7 @@ public class TripAmountOwedActivity extends Activity {
     private Button sendSms;
     private Button sendEmail;
     private List<HashMap<String, Object>> result;
+    private Toolbar toolbar;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -90,8 +97,12 @@ public class TripAmountOwedActivity extends Activity {
         Bundle bundle = getIntent().getExtras();
         tripName = bundle.getString("tripName");
 
-        TextView trip_name = (TextView)findViewById(R.id.trip_name);
-        trip_name.setText(tripName);
+        //Set ToolBar
+        toolbar = (Toolbar)findViewById(R.id.include);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#8C000000")));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(tripName + " Trip");
 
         // Open the Database and fetch the tripItems and persons from the Database
         tripDataSource = new TripDataSource(this);
@@ -210,6 +221,21 @@ public class TripAmountOwedActivity extends Activity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.global, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == android.R.id.home){
+            finish();
+        }
+        return false;
+    }
+
     private HashMap<Integer, Bitmap> getImages(List<TripItem> itemList) {
         int i =0;
 
@@ -267,7 +293,18 @@ public class TripAmountOwedActivity extends Activity {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equalsIgnoreCase("water")){
+        }else if(imageName.equalsIgnoreCase("flight")||imageName.equalsIgnoreCase("plane")||imageName.equalsIgnoreCase("airplane")||imageName.equalsIgnoreCase("aeroplane")){
+
+            try {
+                inputStream = getAssets().open("flight.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }
+        else if(imageName.equalsIgnoreCase("water")){
 
             try {
                 inputStream = getAssets().open("water.jpg");
@@ -381,5 +418,12 @@ public class TripAmountOwedActivity extends Activity {
 
         return imageReturned;
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
+
 
 }

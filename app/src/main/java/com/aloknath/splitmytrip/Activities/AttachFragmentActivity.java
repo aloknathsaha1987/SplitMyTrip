@@ -303,4 +303,11 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
         super.onDestroy();
         tripDataSource.close();
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        finish();
+    }
+
 }

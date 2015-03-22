@@ -1,5 +1,6 @@
 package com.aloknath.splitmytrip.Activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentActivity;
@@ -13,6 +14,7 @@ import com.aloknath.splitmytrip.Fragments.Fragment_Billing;
 import com.aloknath.splitmytrip.Fragments.Fragment_Existing_Trip;
 import com.aloknath.splitmytrip.Fragments.Fragment_Google_Maps;
 import com.aloknath.splitmytrip.Fragments.Fragment_New_Trip;
+import com.aloknath.splitmytrip.GoogleLicense.GPSLicenseActivity;
 import com.aloknath.splitmytrip.R;
 
 public class MainActivity extends ActionBarActivity {
@@ -58,7 +60,9 @@ public class MainActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.google_play_license) {
+            Intent intent = new Intent(MainActivity.this, GPSLicenseActivity.class);
+            startActivity(intent);
             return true;
         }
 

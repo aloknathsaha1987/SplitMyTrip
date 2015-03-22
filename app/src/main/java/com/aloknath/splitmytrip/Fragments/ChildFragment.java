@@ -242,7 +242,18 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
 
-        }else if(imageName.equalsIgnoreCase("hiking")||imageName.equalsIgnoreCase("trekking")){
+        }else if(imageName.equalsIgnoreCase("flight")||imageName.equalsIgnoreCase("plane")||imageName.equalsIgnoreCase("airplane")||imageName.equalsIgnoreCase("aeroplane")){
+
+            try {
+                inputStream = getActivity().getAssets().open("flight.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+
+        }
+        else if(imageName.equalsIgnoreCase("hiking")||imageName.equalsIgnoreCase("trekking")){
 
             try {
                 inputStream = getActivity().getAssets().open("hiking.jpg");

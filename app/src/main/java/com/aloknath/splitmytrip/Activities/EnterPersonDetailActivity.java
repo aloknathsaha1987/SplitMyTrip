@@ -356,6 +356,9 @@ public class EnterPersonDetailActivity extends FragmentActivity implements KeyBo
             BufferedInputStream bufferedInputStream = new BufferedInputStream(photoStream);
             bitmap = BitmapFactory.decodeStream(bufferedInputStream);
             photo.setImageBitmap(bitmap);
+        }else{
+            ImageView photo = (ImageView)findViewById(R.id.imageView_person);
+            photo.setImageBitmap(null);
         }
     }
 

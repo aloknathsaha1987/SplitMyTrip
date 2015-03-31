@@ -109,86 +109,26 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
 
     }
 
+
     @Override
-    public void editPerson(Person person, double newAmountPaid, List<HashMap<String, Object>> result) {
-
-        //Pass the list of sorted data to this function and update the person/ persons associated with the data
-
-        /*
-           I have got the list passed into this function
-
-           Now, the person's updated object is at the end of the code.
-
-           get that,
-           From the list, check if the particular person had to pay to person/ persons
-           If yes, then deduct the amount form the person/persons and update the person's list.
-
-         */
-
-        tripDataSource.open();
-        Trip personTrip = tripDataSource.getTrip(person.getTripName());
-        Toast.makeText(this, " TripData Source is Open" + personTrip.getTripName(), Toast.LENGTH_SHORT).show();
-
-        double oldAmountPaid = person.getAmountPaid();
-        person.setAmountPaid(newAmountPaid);
-
-        person.setBalance((newAmountPaid) - personTrip.getAmountPerHead());
-        Log.i("Person's New Balance: ", String.valueOf(person.getBalance()));
-        Log.i("Amount per head: ", String.valueOf(personTrip.getAmountPerHead()));
-        if(person.getAmountOwed()>0) {
-            if((person.getAmountOwed() - (newAmountPaid- oldAmountPaid))>0) {
-                person.setAmountOwed(person.getAmountOwed() - (newAmountPaid- oldAmountPaid));
-            }else{
-
-                person.setAmountToGet((newAmountPaid- oldAmountPaid) - person.getAmountOwed() );
-                person.setAmountOwed(0);
-            }
-        }
-
-        Log.i(" The Loop is running: ", person.getName());
-
-//        if(newAmountPaid > oldAmountPaid) {
-//            person.setBalance((newAmountPaid) - personTrip.getAmountPerHead());
-//            if(person.getAmountOwed()>0) {
-//                if((person.getAmountOwed() - (newAmountPaid- oldAmountPaid))>0) {
-//                    person.setAmountOwed(person.getAmountOwed() - (newAmountPaid- oldAmountPaid));
-//                }else{
-//
-//                    person.setAmountToGet((newAmountPaid- oldAmountPaid) - person.getAmountOwed() );
-//                    person.setAmountOwed(0);
-//                }
-//            }
-//
-//        }else{
-//            person.setBalance((newAmountPaid) - personTrip.getAmountPerHead());
-//
-//            if(person.getAmountOwed()>0) {
-//                person.setAmountOwed(person.getAmountOwed() + ( oldAmountPaid - newAmountPaid));
-//
-////                if((person.getAmountOwed() - ( oldAmountPaid - newAmountPaid))>0) {
-////                    person.setAmountOwed(person.getAmountOwed() - ( oldAmountPaid - newAmountPaid));
-////                }else{
-////
-////                    person.setAmountToGet((oldAmountPaid - newAmountPaid) - person.getAmountOwed() );
-////                    person.setAmountOwed(0);
-////                }
-//            }
-//        }
-
-        tripDataSource.updatePerson(person);
-
-        HashMap<String, Object> personMap = new HashMap<>();
-        personMap.put("person", person);
-        result.add(personMap);
-
-        Log.i(" The tripDatasource is updated with the person: ", person.getName());
-
-        UpdateDbAsyncTask asyncTask = new UpdateDbAsyncTask();
-        asyncTask.execute(result);
+    public void editItem(TripItem item, List<Person> persons_paid_list, double cost) {
+        Log.i("The Trip Name: ", item.getTripName() + " Item Cost: " + item.getItemCost());
+        UpdateDbAsyncTask asyncTask = new UpdateDbAsyncTask(item, persons_paid_list, cost);
+        asyncTask.execute();
 
     }
 
-    private class UpdateDbAsyncTask extends AsyncTask<List<HashMap<String, Object>>, Void, Person>{
+    private class UpdateDbAsyncTask extends AsyncTask<Void, Void, Void>{
+
+        private  TripItem item;
+        private List<Person> personList;
+        private double cost;
+        public UpdateDbAsyncTask(TripItem item, List<Person> persons, double cost){
+            this.item = item;
+            this.personList = persons;
+            this.cost = cost;
+        }
+
 
         @Override
         protected void onPreExecute() {
@@ -197,94 +137,60 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
             progressDialog.setIndeterminate(true);
             progressDialog.show();
         }
+
         @Override
-        protected Person doInBackground(List<HashMap<String, Object>>... lists) {
+        protected Void doInBackground(Void... voids) {
 
-            Person sender;
-            Person recipient;
-            double amount;
-            HashMap<String, Object> mapReturned = (HashMap<String, Object>) lists[0].get(lists[0].size() - 1);
-            Person person = (Person)mapReturned.get("person");
-            Log.i(" The Results Size: ", String.valueOf(lists[0].size()));
-            lists[0].remove(lists[0].size() - 1);
-            Log.i(" The Results Size after deletion: ", String.valueOf(lists[0].size()));
-            Iterator iterator = lists[0].iterator();
-            Log.i(" The Loop is running inside the Async Task: ", person.getName());
+            // Save the Updated Trip Item
+            item.setItemCost(item.getItemCost() + cost);
+            tripDataSource.updateTripItem(item);
 
-            while (iterator.hasNext()) {
+            //Update the Trips Table regarding the cost per head and Save it
 
-                mapReturned = (HashMap<String, Object>) iterator.next();
-                sender = (Person) mapReturned.get("from");
-                Person temp = tripDataSource.getPersonDetails(sender.getName(), sender.getTripName());
-                sender.setBalance(temp.getBalance());
-                recipient = (Person) mapReturned.get("to");
-                temp = tripDataSource.getPersonDetails(recipient.getName(), recipient.getTripName());
-                recipient.setBalance(temp.getBalance());
+            Trip trip = tripDataSource.getTrip(item.getTripName());
 
-                if(sender.getName().equals(person.getName())){
+            double amountPerHead;
 
-                    Log.i(" Come inside this loop: ", sender.getName());
-                    Log.i("Sender Details: ", sender.toString());
-                    Log.i("Recipient Details: ", recipient.toString());
+            amountPerHead = trip.getTotalCost() + cost;
+            amountPerHead = amountPerHead / trip.getNoOfPersons();
 
-                    if(sender.getAmountOwed() > (person.getAmountPaid() - sender.getAmountPaid())){
-                        amount = (person.getAmountPaid() - sender.getAmountPaid());
+            trip.setTotalCost(trip.getTotalCost() + cost);
+            trip.setAmountPerHead(amountPerHead);
 
-                    }else{
-                        amount = sender.getAmountOwed();
-                    }
-                    amount = Math.round(amount * 100) / 100.0d;
-                    // just have to update the recipient
-                    Log.i("The Amount generated", String.valueOf(amount));
-                    Log.i("The Recipient Balance before modification: ", String.valueOf(recipient.getBalance()) + ":" + String.valueOf(amount));
-                    recipient.setAmountToGet(Math.round((recipient.getAmountToGet() - amount)*100)/100.0d);
-                    recipient.setBalance(Math.round((recipient.getBalance() - amount)*100)/100.0d);
-                    Log.i("The recipient's Name and Balance", recipient.getName() + " :"+ String.valueOf(recipient.getBalance()));
-                    recipient.setAmountPaid(Math.round((recipient.getAmountPaid() - amount)*100)/100.0d);
+            tripDataSource.updateTrip(trip);
 
-                    // Update the recipient in the Database
-//                    tripDataSource.open();
-                    tripDataSource.updatePerson(recipient);
-                    Log.i(" Updation of the Db Done ", recipient.getName());
+            // Update the persons and save it into DB
 
+            for(Person person: personList){
+
+                double amountOwed = amountPerHead - person.getAmountPaid();
+                double amountToGet = 0;
+
+                if(amountOwed < 0){
+                    amountToGet = -(amountOwed);
+                    amountOwed = 0;
                 }
-                Log.i(" Stuck In the Iterator Loop","");
+                amountToGet = Math.round(amountToGet*100)/100.0d;
+                amountOwed = Math.round(amountOwed*100)/100.0d;
+                person.setAmountOwed(amountOwed);
+                person.setAmountToGet(amountToGet);
+                person.setBalance(person.getAmountPaid() - amountPerHead);
+                tripDataSource.updatePerson(person);
             }
 
-            Log.i(" Coming out of the Iterator Loop ","");
-
-            return person;
+            return null;
         }
 
         @Override
-        protected void onPostExecute(Person person) {
-            super.onPostExecute(person);
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
             progressDialog.hide();
             tripDataSource.close();
-            refreshDisplay(person.getTripName());
+            refreshDisplay(item.getTripName());
 
         }
-    }
-
-    @Override
-    public void editItem(TripItem item, double newItemAmount) {
-
-        Trip itemTrip = tripDataSource.getTrip(item.getTripName());
-
-        TripItem checkerTripItem = tripDataSource.getTripItem(item.getTripName(), item.getItemName());
-
-        itemTrip.setTotalCost(itemTrip.getTotalCost() - checkerTripItem.getItemCost() + newItemAmount);
-        itemTrip.setAmountPerHead(itemTrip.getTotalCost()/ itemTrip.getNoOfPersons());
-        item.setItemCost(newItemAmount);
-
-
-        tripDataSource.updateTrip(itemTrip);
-        tripDataSource.updateTripItem(item);
-        refreshDisplay(item.getTripName());
-        tripDataSource.close();
 
     }
-
 
     @Override
     protected void onResume() {

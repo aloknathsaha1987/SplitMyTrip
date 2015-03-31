@@ -1,7 +1,6 @@
 package com.aloknath.splitmytrip.Activities;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -409,6 +408,14 @@ public class TripAmountOwedActivity extends ActionBarActivity {
 
             try {
                 inputStream = getAssets().open("beach.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+        }else{
+            try {
+                inputStream = getAssets().open("default_item.jpg");
             } catch (IOException e) {
                 e.printStackTrace();
             }

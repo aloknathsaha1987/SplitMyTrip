@@ -21,6 +21,8 @@ import com.aloknath.splitmytrip.R;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 
 import static com.aloknath.splitmytrip.ImageConversion.DbBitmapUtility.getImage;
@@ -42,6 +44,14 @@ public class ExpandableBaseAdapter extends BaseExpandableListAdapter {
         this.context = context;
         this.tripItemsPersons = tripItemsPersons;
         this.imagesPassed = imagesPassed;
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 
@@ -206,9 +216,9 @@ public class ExpandableBaseAdapter extends BaseExpandableListAdapter {
             }
 
             holderPerson.personName.setText(person.getName());
-            holderPerson.amount_paid.setText("" + String.valueOf(person.getAmountPaid()));
-            holderPerson.amount_owed.setText("" + String.valueOf(person.getAmountOwed()));
-            holderPerson.amount_to_get.setText("" + String.valueOf(person.getAmountToGet()));
+            holderPerson.amount_paid.setText("" + String.valueOf(round(person.getAmountPaid(),2)));
+            holderPerson.amount_owed.setText("" + String.valueOf(round(person.getAmountOwed(),2)));
+            holderPerson.amount_to_get.setText("" + String.valueOf(round(person.getAmountToGet(),2)));
         }
 
         return convertView;

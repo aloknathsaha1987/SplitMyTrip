@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Food"
+        android:textSize="30sp"
+        android:textColor="#000000"
+        android:id="@+id/item_name"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="120dp"
+        android:layout_marginStart="120dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cost: "
+        android:id="@+id/item_cost"
+        android:layout_below="@+id/item_name"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"
+        android:textSize="20sp"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="100"
+        android:id="@+id/cost"
+        android:layout_below="@+id/item_name"
+        android:layout_toRightOf="@+id/item_cost"
+        android:layout_toEndOf="@+id/item_cost"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:textSize="20sp"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Amount To Add: "
+        android:id="@+id/amount_to_add"
+        android:layout_below="@+id/item_cost"
+        android:layout_alignLeft="@+id/item_cost"
+        android:layout_alignStart="@+id/item_cost"
+        android:layout_marginTop="25dp"
+        android:textSize="20sp"
+        android:textColor="#000000"/>
+
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:id="@+id/edit_item_amount"
+        android:layout_below="@+id/item_cost"
+        android:hint="Amount"
+        android:inputType="phone"
+        android:digits="1234567890"
+        android:layout_alignLeft="@+id/amount_to_add"
+        android:layout_alignStart="@+id/amount_to_add"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="155dp"
+        android:layout_marginLeft="155dp"
+        android:background="#ff19ffe6"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Paid By: "
+        android:id="@+id/textView4"
+        android:layout_below="@+id/edit_item_amount"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="25dp"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:layout_marginLeft="25dp"
+        android:layout_marginStart="25dp"/>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:id="@+id/scrollView"
+        android:layout_below="@+id/textView4"
+        android:layout_marginTop="15dp"
+         >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/linearlayout">
+
+            </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update Cost"
+        android:id="@+id/button_update_item_cost"
+        android:layout_below="@+id/scrollView"
+        android:layout_marginLeft="95dp"
+        android:layout_marginStart="95dp"/>
+
+</RelativeLayout>

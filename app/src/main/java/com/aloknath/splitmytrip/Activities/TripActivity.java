@@ -272,7 +272,16 @@ public class TripActivity extends ActionBarActivity {
             }
             BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
             imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
+        }else{
+            try {
+                inputStream = getAssets().open("default_item.jpg");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
+            imageReturned = BitmapFactory.decodeStream(bufferedInputStream);
         }
+
 
         return imageReturned;
     }

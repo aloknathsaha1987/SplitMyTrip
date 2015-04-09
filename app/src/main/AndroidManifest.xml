@@ -59,6 +59,7 @@
         <activity android:name=".Activities.TripActivity" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.AttachFragmentActivity" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.TripAmountOwedActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.AddPersonToTripActivity" android:screenOrientation="portrait"/>
         <activity android:name=".GoogleLicense.GPSLicenseActivity" android:screenOrientation="landscape"/>
 
     </application>

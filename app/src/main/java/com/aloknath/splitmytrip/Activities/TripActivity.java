@@ -10,10 +10,13 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
+
 import com.aloknath.splitmytrip.Adapters.ExpandableBaseAdapter;
 import com.aloknath.splitmytrip.Database.TripDataSource;
 import com.aloknath.splitmytrip.Fragments.ParentViewPagerFragment;
@@ -44,6 +47,8 @@ public class TripActivity extends ActionBarActivity {
     private List<HashMap<String, Object>> result;
     private HashMap<Integer, Bitmap> itemImages = new HashMap<>();
     private Toolbar toolbar;
+    private String tripName;
+    public static final int EDITOR_ACTIVITY_REQUEST = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,51 +61,17 @@ public class TripActivity extends ActionBarActivity {
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        tripItemsPersons = getTripItems((String)bundle.get("tripName"));
-
+        //tripItemsPersons = getTripItems((String)bundle.get("tripName"));
+        tripName = (String)bundle.get("tripName");
         // Set The ToolBar
         toolbar = (Toolbar)findViewById(R.id.include);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#8C000000")));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle((String)bundle.get("tripName") + " Trip");
 
-
-        if(persons.size() > 0) {
-
-            //Log.i("The Map Returned: ", "Sender: " + persons.get(0).getName());
-            result = calculate(persons, 0);
-
-            if(result.size() > 0) {
-                Person sender;
-                Person recipient;
-                double amount;
-
-               // Toast.makeText(TripActivity.this, "Sender: " + sender.getName() + " gave " + String.valueOf(amount) + " to " + recipient.getName(), Toast.LENGTH_LONG).show();
-
-                Iterator iterator = result.iterator();
-
-                while (iterator.hasNext()) {
-
-                    HashMap<String, Object> mapReturned = (HashMap<String, Object>) iterator.next();
-                    sender = (Person) mapReturned.get("from");
-                    recipient = (Person) mapReturned.get("to");
-                    amount = (Double) mapReturned.get("amount");
-
-                    Log.i("The Map Returned: ", sender.getName() + " has to give " + String.valueOf(amount) + " to " + recipient.getName());
-
-                    //Toast.makeText(TripActivity.this, "Sender: " + sender.getName() + " gave " + String.valueOf(amount) + " to " + recipient.getName(), Toast.LENGTH_LONG).show();
-
-                }
-            }else{
-                Log.i("The Map Returned: "," is Null");
-            }
-        }
-
-
-        listAdapter = new ExpandableBaseAdapter(this, tripItemsPersons, itemImages);
-
-        expListView.setAdapter(listAdapter);
+        refreshDisplay();
 
         listViewListner();
 
@@ -347,16 +318,84 @@ public class TripActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.global, menu);
+        getMenuInflater().inflate(R.menu.add_person_item, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId() == android.R.id.home){
-            finish();
+
+        Intent intent;
+        Bundle b = new Bundle();
+        switch (item.getItemId()) {
+            case R.id.add_person:
+                intent = new Intent(TripActivity.this, AddPersonToTripActivity.class);
+                b.putString("Trip_title", tripName);
+                b.putInt("Trip_no_of_persons", 1);
+                // Do a StartActivity For Result and upon receiving the result (return the Trip Name),
+                // recalculate per person's amount in the database
+                intent.putExtras(b);
+                startActivityForResult(intent, EDITOR_ACTIVITY_REQUEST);
+
+                break;
+            case R.id.add_item:
+                intent = new Intent(TripActivity.this, EnterItemActivity.class);
+                startActivity(intent);
+                break;
+            case android.R.id.home:
+                finish();
+                break;
         }
-        return false;
+        return true;
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EDITOR_ACTIVITY_REQUEST && resultCode == RESULT_OK) {
+            refreshDisplay();
+        }
+    }
+
+    private void refreshDisplay() {
+
+        persons = tripDataSource.getPersonsInTrip(tripName);
+
+        if(persons.size() > 0) {
+
+            //Log.i("The Map Returned: ", "Sender: " + persons.get(0).getName());
+            result = calculate(persons, 0);
+
+            if(result.size() > 0) {
+                Person sender;
+                Person recipient;
+                double amount;
+
+                // Toast.makeText(TripActivity.this, "Sender: " + sender.getName() + " gave " + String.valueOf(amount) + " to " + recipient.getName(), Toast.LENGTH_LONG).show();
+
+                Iterator iterator = result.iterator();
+
+                while (iterator.hasNext()) {
+
+                    HashMap<String, Object> mapReturned = (HashMap<String, Object>) iterator.next();
+                    sender = (Person) mapReturned.get("from");
+                    recipient = (Person) mapReturned.get("to");
+                    amount = (Double) mapReturned.get("amount");
+
+                    Log.i("The Map Returned: ", sender.getName() + " has to give " + String.valueOf(amount) + " to " + recipient.getName());
+
+                    //Toast.makeText(TripActivity.this, "Sender: " + sender.getName() + " gave " + String.valueOf(amount) + " to " + recipient.getName(), Toast.LENGTH_LONG).show();
+
+                }
+            }else{
+                Log.i("The Map Returned: "," is Null");
+            }
+        }
+
+        tripItemsPersons = getTripItems(tripName);
+
+        listAdapter = new ExpandableBaseAdapter(this, tripItemsPersons, itemImages);
+
+        expListView.setAdapter(listAdapter);
+
     }
 
 
@@ -386,6 +425,8 @@ public class TripActivity extends ActionBarActivity {
     private TripItemsPersons getTripItems(String tripName) {
 
       tripItems = tripDataSource.getTripItems(tripName);
+//      TripItem addItem = new TripItem( "Add Trip Item", tripName);
+//      tripItems.add(addItem);
       HashMap<Integer, TripItem> tripItemList = new HashMap<>();
       int i =0;
       for(TripItem item: tripItems){
@@ -410,7 +451,7 @@ public class TripActivity extends ActionBarActivity {
 
     }
 
-    public class TripItemsPersons {
+    public static class TripItemsPersons {
         private final HashMap<Integer, TripItem> items;
         private final HashMap<Integer, Person> persons;
 

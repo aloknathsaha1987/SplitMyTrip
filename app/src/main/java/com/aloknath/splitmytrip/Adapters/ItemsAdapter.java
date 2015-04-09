@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class ItemsAdapter  extends ArrayAdapter<TripItem> {
 
-    private Context context;
-    private List<TripItem> itemList;
+    private final Context context;
+    private final List<TripItem> itemList;
     private HashMap<Integer, Bitmap> itemsHashMap = new HashMap<>();
     private HashMap<Integer, Bitmap> imagesPassed = new HashMap<>();
 

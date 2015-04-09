@@ -274,7 +274,13 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
 
                                     Person person = personList.get(i[0]);
                                     Log.i("The Person name: ", person.getName() + String.valueOf(person.getAmountPaid()));
-                                    person.setAmountPaid(person.getAmountPaid() + Double.parseDouble(allEds.get(i[0]).getText().toString()));
+                                    if(allEds.get(i[0]).getText().toString().isEmpty()){
+                                        //Do Nothing
+//                                        person.setAmountPaid(person.getAmountPaid() + 0.0);
+                                    }else{
+                                        person.setAmountPaid(person.getAmountPaid() + Double.parseDouble(allEds.get(i[0]).getText().toString()));
+                                    }
+
                                     persons_paid_list.add(person);
                                     totalcost[0] += Double.parseDouble(allEds.get(i[0]).getText().toString());
                                 }
@@ -314,6 +320,7 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
 
     private Bitmap setItemImage(String imageName) {
 
+        imageName = imageName.trim();
         InputStream inputStream = null;
         Bitmap imageReturned = null;
 

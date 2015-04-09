@@ -134,8 +134,6 @@ public class NewTripActivity extends FragmentActivity implements KeyBoardFragmen
                     startActivity(intent);
 
                 }
-
-
             }
         });
 

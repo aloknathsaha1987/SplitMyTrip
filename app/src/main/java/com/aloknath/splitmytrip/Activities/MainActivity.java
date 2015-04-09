@@ -31,9 +31,6 @@ public class MainActivity extends ActionBarActivity {
         getSupportActionBar().setTitle("Split My Trip");
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#8C000000")));
 
-
-
-
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         Fragment_New_Trip fragment_new_trip = new Fragment_New_Trip();
         fragmentTransaction.replace(R.id.fragmentNewTrip, fragment_new_trip.newInstance("New Trip"));

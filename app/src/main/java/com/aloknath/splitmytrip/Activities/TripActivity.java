@@ -108,8 +108,9 @@ public class TripActivity extends ActionBarActivity {
 
     private Bitmap setItemImage(String imageName) {
 
+        imageName = imageName.trim();
         InputStream inputStream = null;
-        Bitmap imageReturned = null;
+        Bitmap imageReturned;
 
         if(imageName.equalsIgnoreCase("travel")){
 

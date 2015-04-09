@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class TripsAdapter extends ArrayAdapter<Trip> {
 
-    private Context context;
-    private List<Trip> tripList;
+    private final Context context;
+    private final List<Trip> tripList;
     private String[] tripImages = new String[]{"existing_trip.jpg","trip1.jpg" , "trip2.jpg", "new_trip.jpg", "park.jpg","beach.jpg"};
 
     public TripsAdapter(Context context, int resource,  List<Trip> items) {

@@ -120,9 +120,10 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
 
     private class UpdateDbAsyncTask extends AsyncTask<Void, Void, Void>{
 
-        private  TripItem item;
-        private List<Person> personList;
-        private double cost;
+        private final TripItem item;
+        private final List<Person> personList;
+        private final double cost;
+
         public UpdateDbAsyncTask(TripItem item, List<Person> persons, double cost){
             this.item = item;
             this.personList = persons;
@@ -159,9 +160,9 @@ public class AttachFragmentActivity extends FragmentActivity implements ChildFra
 
             tripDataSource.updateTrip(trip);
 
-            // Update the persons and save it into DB
-
             for(Person person: personList){
+
+                Log.i("Person in persons List: " , person.getName());
 
                 double amountOwed = amountPerHead - person.getAmountPaid();
                 double amountToGet = 0;

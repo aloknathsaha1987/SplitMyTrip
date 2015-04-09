@@ -249,6 +249,7 @@ public class TripAmountOwedActivity extends ActionBarActivity {
 
     private Bitmap setItemImage(String imageName) {
 
+        imageName = imageName.trim();
         InputStream inputStream = null;
         Bitmap imageReturned = null;
 

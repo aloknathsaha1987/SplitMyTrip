@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class PersonsAdapter  extends ArrayAdapter<Person> {
 
-    private Context context;
-    private List<Person> personList;
+    private final Context context;
+    private final List<Person> personList;
     private HashMap<Integer, Bitmap> personsHashMap = new HashMap<>();
 
     public PersonsAdapter(Context context, int resource, List<Person> personList){
@@ -67,7 +67,7 @@ public class PersonsAdapter  extends ArrayAdapter<Person> {
         return convertView;
     }
 
-    static class ViewHolderPerson{
+    private static class ViewHolderPerson{
         private RoundedImageView imageView;
         private TextView personName;
         private TextView amount_paid;

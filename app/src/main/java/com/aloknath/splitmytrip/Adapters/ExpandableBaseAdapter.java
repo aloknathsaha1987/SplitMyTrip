@@ -33,7 +33,7 @@ import static com.aloknath.splitmytrip.ImageConversion.DbBitmapUtility.getImage;
 
 public class ExpandableBaseAdapter extends BaseExpandableListAdapter {
 
-    private Context context;
+    private final Context context;
     private final TripActivity.TripItemsPersons tripItemsPersons;
     private TextView textView;
     private HashMap<Integer, Bitmap> itemsHashMap = new HashMap<>();

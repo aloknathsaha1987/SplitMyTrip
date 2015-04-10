@@ -22,7 +22,7 @@ public class PersonsAdapter  extends ArrayAdapter<Person> {
 
     private final Context context;
     private final List<Person> personList;
-    private HashMap<Integer, Bitmap> personsHashMap = new HashMap<>();
+    private final HashMap<Integer, Bitmap> personsHashMap = new HashMap<>();
 
     public PersonsAdapter(Context context, int resource, List<Person> personList){
         super(context, resource, personList);
@@ -34,13 +34,13 @@ public class PersonsAdapter  extends ArrayAdapter<Person> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         Person person = personList.get(position);
-
-        if(convertView == null){
+//
+//        if(convertView == null){
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.person_list_display, null);
 
             ViewHolderPerson viewHolderPerson = new ViewHolderPerson();
-            viewHolderPerson.imageView = (RoundedImageView)convertView.findViewById(R.id.imageView2);
+            viewHolderPerson.imageView = (RoundedImageView) convertView.findViewById(R.id.imageView2);
             viewHolderPerson.amount_owed = (TextView) convertView.findViewById(R.id.edit_amount_owed);
             viewHolderPerson.amount_paid = (TextView) convertView.findViewById(R.id.edit_amount_paid);
             viewHolderPerson.amount_to_get = (TextView) convertView.findViewById(R.id.edit_amount_to_get);
@@ -63,7 +63,7 @@ public class PersonsAdapter  extends ArrayAdapter<Person> {
             holderPerson.amount_owed.setText("" + String.valueOf(person.getAmountOwed()));
             holderPerson.amount_to_get.setText("" + String.valueOf(person.getAmountToGet()));
 
-        }
+       // }
         return convertView;
     }
 

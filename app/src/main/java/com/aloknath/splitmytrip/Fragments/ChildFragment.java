@@ -192,6 +192,16 @@ public class ChildFragment extends Fragment implements View.OnClickListener {
 
             update_item_cost = (Button)root.findViewById(R.id.update_item_cost);
 
+            InputStream ims;
+            try {
+                ims = getActivity().getAssets().open("button_update_item_cost.png");
+                Drawable d = Drawable.createFromStream(ims, null);
+                update_item_cost.setBackground(d);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 
             update_item_cost.setOnClickListener( new View.OnClickListener() {
                 @Override

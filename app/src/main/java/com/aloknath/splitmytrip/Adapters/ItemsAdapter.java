@@ -22,7 +22,7 @@ public class ItemsAdapter  extends ArrayAdapter<TripItem> {
 
     private final Context context;
     private final List<TripItem> itemList;
-    private HashMap<Integer, Bitmap> itemsHashMap = new HashMap<>();
+    private final HashMap<Integer, Bitmap> itemsHashMap = new HashMap<>();
     private HashMap<Integer, Bitmap> imagesPassed = new HashMap<>();
 
     public ItemsAdapter(Context context, int resource, List<TripItem> itemList, HashMap<Integer, Bitmap> imagesPassed ){
@@ -36,8 +36,6 @@ public class ItemsAdapter  extends ArrayAdapter<TripItem> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         TripItem item = itemList.get(position);
-
-        if(convertView == null){
 
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.trip_items_list_display, null);
@@ -64,7 +62,6 @@ public class ItemsAdapter  extends ArrayAdapter<TripItem> {
 
             holderItem.item_cost.setText(String.valueOf(item.getItemCost()));
 
-        }
         return convertView;
     }
 

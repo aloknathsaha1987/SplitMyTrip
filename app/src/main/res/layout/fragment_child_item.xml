@@ -72,9 +72,8 @@
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="125dp"
         android:layout_height="wrap_content"
-        android:text="Edit Item Cost"
         android:id="@+id/update_item_cost"
         android:layout_below="@+id/item_cost"
         android:layout_alignLeft="@+id/item_cost"

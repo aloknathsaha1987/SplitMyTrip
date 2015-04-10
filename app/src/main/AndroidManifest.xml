@@ -61,6 +61,7 @@
         <activity android:name=".Activities.TripAmountOwedActivity" android:screenOrientation="portrait"/>
         <activity android:name=".Activities.AddPersonToTripActivity" android:screenOrientation="portrait"/>
         <activity android:name=".GoogleLicense.GPSLicenseActivity" android:screenOrientation="landscape"/>
+        <activity android:name=".Activities.AddItemActivity" android:screenOrientation="portrait"/>
 
     </application>
 

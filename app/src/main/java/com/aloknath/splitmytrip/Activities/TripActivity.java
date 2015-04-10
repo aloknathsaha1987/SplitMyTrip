@@ -49,6 +49,7 @@ public class TripActivity extends ActionBarActivity {
     private Toolbar toolbar;
     private String tripName;
     public static final int EDITOR_ACTIVITY_REQUEST = 1001;
+    public static final int ITEM_ADDED_TO_TRIP = 1002;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,16 +333,17 @@ public class TripActivity extends ActionBarActivity {
                 intent = new Intent(TripActivity.this, AddPersonToTripActivity.class);
                 b.putString("Trip_title", tripName);
                 b.putInt("Trip_no_of_persons", 1);
-                // Do a StartActivity For Result and upon receiving the result (return the Trip Name),
-                // recalculate per person's amount in the database
                 intent.putExtras(b);
                 startActivityForResult(intent, EDITOR_ACTIVITY_REQUEST);
+                break;
 
-                break;
             case R.id.add_item:
-                intent = new Intent(TripActivity.this, EnterItemActivity.class);
-                startActivity(intent);
+                intent = new Intent(TripActivity.this, AddItemActivity.class);
+                b.putString("Trip_title", tripName);
+                intent.putExtras(b);
+                startActivityForResult(intent, ITEM_ADDED_TO_TRIP);
                 break;
+
             case android.R.id.home:
                 finish();
                 break;
@@ -351,6 +353,8 @@ public class TripActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == EDITOR_ACTIVITY_REQUEST && resultCode == RESULT_OK) {
+            refreshDisplay();
+        }else if (requestCode == ITEM_ADDED_TO_TRIP && resultCode == RESULT_OK){
             refreshDisplay();
         }
     }
